@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Escrutinio Real - Sistema Turso</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #dee2e6;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            color: #1f2937;
+            margin: 0;
+        }
+
+        .btn-refresh {
+            background-color: #107c41; /* Verde Excel */
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-refresh:hover {
+            background-color: #0b5931;
+        }
+
+        /* Estilos Estilo Excel */
+        .excel-table-container {
+            background: #ffffff;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            overflow-x: auto;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f3f4f6;
+            color: #4b5563;
+            font-weight: 600;
+            border-bottom: 2px solid #d1d5db;
+            border-right: 1px solid #e5e7eb;
+            padding: 10px 12px;
+            user-select: none;
+        }
+
+        td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #e5e7eb;
+            border-right: 1px solid #e5e7eb;
+            white-space: nowrap;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+
+        tr:hover {
+            background-color: #f3f4f6;
+        }
+
+        /* Tags para identificar rápido la elección */
+        .badge {
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .badge-presidencial { background-color: #dbeafe; color: #1e40af; }
+        .badge-legislativa { background-color: #fef3c7; color: #92400e; }
+
+        .loading {
+            padding: 40px;
+            text-align: center;
+            color: #6b7280;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <div>
+                <h1>📊 Libro de Escrutinio Automatizado (Turso DB)</h1>
+                <p style="margin: 5px 0 0 0; color: #6b7280; font-size: 0.9rem;">Auditoría de votos en tiempo real filtrados por IP y Usuario.</p>
+            </div>
+            <button class="btn-refresh" onclick="cargarVotos()">🔄 Actualizar Datos</button>
+        </header>
+
+        <div class="excel-table-container">
+            <table id="tablaVotos">
+                <thead>
+                    <tr>
+                        <th style="width: 60px;">ID</th>
+                        <th>Usuario Discord</th>
+                        <th>Dirección IP Votante</th>
+                        <th>Tipo de Elección</th>
+                        <th>Candidato / Opción Marcada</th>
+                        <th>Fecha y Hora (UTC)</th>
+                    </tr>
+                </thead>
+                <tbody id="cuerpoTabla">
+                    <tr>
+                        <td colspan="6" class="loading">Cargando registros directamente desde el clúster de Turso...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Función que va al Backend a traer las filas de Turso
+        function cargarVotos() {
+            const tbody = document.getElementById('cuerpoTabla');
+            
+            fetch('/api/resultados')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.OK) {
+                        tbody.innerHTML = ''; // Limpiamos la tabla
+                        
+                        if (data.votos.length === 0) {
+                            tbody.innerHTML = `<tr><td colspan="6" class="loading">No hay votos registrados en la base de datos aún.</td></tr>`;
+                            return;
+                        }
+
+                        // Iteramos sobre cada voto e inyectamos la fila tipo Excel
+                        data.votos.forEach(voto => {
+                            const fila = document.createElement('tr');
+                            
+                            // Determinamos el diseño del badge según la elección
+                            const badgeClass = voto.tipo_eleccion === 'presidencial' ? 'badge-presidencial' : 'badge-legislativa';
+
+                            fila.innerHTML = `
+                                <td style="font-weight: bold; color: #6b7280; text-align: center;">${voto.id}</td>
+                                <td style="font-weight: 600; color: #111827;">@${escapeHTML(voto.usuario_discord)}</td>
+                                <td style="font-family: monospace; color: #374151;">${escapeHTML(voto.ip_votante)}</td>
+                                <td><span class="badge ${badgeClass}">${voto.tipo_eleccion}</span></td>
+                                <td style="color: #0369a1; font-weight: 500;">${escapeHTML(voto.opcion_marcada)}</td>
+                                <td style="color: #6b7280;">${formatearFecha(voto.fecha)}</td>
+                            `;
+                            tbody.appendChild(fila);
+                        });
+                    } else {
+                        tbody.innerHTML = `<tr><td colspan="6" class="loading" style="color: #dc2626;">Error: ${data.error}</td></tr>`;
+                    }
+                })
+                .catch(err => {
+                    tbody.innerHTML = `<tr><td colspan="6" class="loading" style="color: #dc2626;">Error de red al conectar con el backend.</td></tr>`;
+                });
+        }
+
+        // Seguridad básica para evitar inyecciones de texto en el HTML visible
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+            );
+        }
+
+        // Formatea la fecha por defecto de SQLite a algo más legible
+        function formatearFecha(fechaSQL) {
+            if(!fechaSQL) return "N/A";
+            // Si viene directo del CURRENT_TIMESTAMP de SQLite, reemplazamos espacios y formatos
+            return fechaSQL.replace('T', ' ').replace('Z', '');
+        }
+
+        // Ejecutar la carga apenas abra la página
+        window.onload = cargarVotos;
+    </script>
+</body>
+</html>
+
