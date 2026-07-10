@@ -278,5 +278,15 @@
     "opcion_marcada": "Nuevo MAS - Número 1",
     "tipo_eleccion": "Legislativas",
     "fecha": "2026-07-10T23:12:44.524Z"
+  },
+  {
+    "id": 29,
+    "usuario_discord": "juancito.w.",
+    "region": "Otresa",
+    "ubicacion": "Interior",
+    "ip_votante": "66.163.125.120",
+    "opcion_marcada": "Magno Alejandro - Libertad y Orden (LO)",
+    "tipo_eleccion": "Presidencial",
+    "fecha": "2026-07-10T23:17:25.185Z"
   }
 ]
