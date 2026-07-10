@@ -78,5 +78,15 @@
     "opcion_marcada": "Donald Trump - Partido Republicano (PR)",
     "tipo_eleccion": "Presidencial",
     "fecha": "2026-07-10T08:59:28.720Z"
+  },
+  {
+    "id": 9,
+    "usuario_discord": "kmarada0484",
+    "region": "Arkastra",
+    "ubicacion": "Interior",
+    "ip_votante": "79.159.245.153",
+    "opcion_marcada": "Donald Trump - Partido Republicano (PR)",
+    "tipo_eleccion": "Presidencial",
+    "fecha": "2026-07-10T09:04:52.644Z"
   }
 ]
