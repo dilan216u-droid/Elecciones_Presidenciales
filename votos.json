@@ -298,5 +298,15 @@
     "opcion_marcada": "Magno Alejandro - Libertad y Orden (LO)",
     "tipo_eleccion": "Presidencial",
     "fecha": "2026-07-10T23:18:33.146Z"
+  },
+  {
+    "id": 31,
+    "usuario_discord": "detamos.1008",
+    "region": "Luva",
+    "ubicacion": "Interior",
+    "ip_votante": "38.107.226.140",
+    "opcion_marcada": "Magno Alejandro - Libertad y Orden (LO)",
+    "tipo_eleccion": "Presidencial",
+    "fecha": "2026-07-10T23:20:00.102Z"
   }
 ]
