@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Escrutinio Real - Sistema Turso</title>
+    <title>Panel de Escrutinio Real - Servidor de Votos</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -14,7 +14,7 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1300px;
             margin: 0 auto;
         }
 
@@ -92,7 +92,7 @@
             background-color: #f3f4f6;
         }
 
-        /* Tags para identificar rápido la elección */
+        /* Tags para identificar rápido */
         .badge {
             padding: 3px 8px;
             border-radius: 12px;
@@ -102,6 +102,9 @@
         }
         .badge-presidencial { background-color: #dbeafe; color: #1e40af; }
         .badge-legislativa { background-color: #fef3c7; color: #92400e; }
+        
+        .badge-interior { background-color: #e6f4ea; color: #137333; }
+        .badge-exterior { background-color: #fce8e6; color: #c5221f; }
 
         .loading {
             padding: 40px;
@@ -116,8 +119,8 @@
     <div class="container">
         <header>
             <div>
-                <h1>📊 Libro de Escrutinio Automatizado (Turso DB)</h1>
-                <p style="margin: 5px 0 0 0; color: #6b7280; font-size: 0.9rem;">Auditoría de votos en tiempo real filtrados por IP y Usuario.</p>
+                <h1>📊 Libro de Escrutinio Automatizado (Vercel API)</h1>
+                <p style="margin: 5px 0 0 0; color: #6b7280; font-size: 0.9rem;">Auditoría de auditoría en vivo. Monitoreo de regiones y procedencia de voto.</p>
             </div>
             <button class="btn-refresh" onclick="cargarVotos()">🔄 Actualizar Datos</button>
         </header>
@@ -128,15 +131,17 @@
                     <tr>
                         <th style="width: 60px;">ID</th>
                         <th>Usuario Discord</th>
-                        <th>Dirección IP Votante</th>
+                        <th>Región</th>
+                        <th>Ubicación</th>
                         <th>Tipo de Elección</th>
                         <th>Candidato / Opción Marcada</th>
+                        <th>Dirección IP Votante</th>
                         <th>Fecha y Hora (UTC)</th>
                     </tr>
                 </thead>
                 <tbody id="cuerpoTabla">
                     <tr>
-                        <td colspan="6" class="loading">Cargando registros directamente desde el clúster de Turso...</td>
+                        <td colspan="8" class="loading">Cargando registros de auditoría desde la API de Vercel...</td>
                     </tr>
                 </tbody>
             </table>
@@ -144,64 +149,67 @@
     </div>
 
     <script>
-        // Función que va al Backend a traer las filas de Turso
+        // Función que va a la API de Vercel a traer el listado seguro de auditoría
         function cargarVotos() {
             const tbody = document.getElementById('cuerpoTabla');
             
             fetch('/api/resultados')
                 .then(res => res.json())
                 .then(data => {
-                    if (data.OK) {
-                        tbody.innerHTML = ''; // Limpiamos la tabla
+                    if (data.OK || data.votos) {
+                        tbody.innerHTML = ''; 
                         
-                        if (data.votos.length === 0) {
-                            tbody.innerHTML = `<tr><td colspan="6" class="loading">No hay votos registrados en la base de datos aún.</td></tr>`;
+                        const listaVotos = data.votos || [];
+
+                        if (listaVotos.length === 0) {
+                            tbody.innerHTML = `<tr><td colspan="8" class="loading">No hay votos registrados en el servidor aún.</td></tr>`;
                             return;
                         }
 
-                        // Iteramos sobre cada voto e inyectamos la fila tipo Excel
-                        data.votos.forEach(voto => {
+                        // Iteramos e insertamos las nuevas columnas mapeadas
+                        listaVotos.forEach(voto => {
                             const fila = document.createElement('tr');
                             
-                            // Determinamos el diseño del badge según la elección
-                            const badgeClass = voto.tipo_eleccion === 'presidencial' ? 'badge-presidencial' : 'badge-legislativa';
+                            const badgeEleccion = voto.tipo_eleccion?.toLowerCase() === 'presidencial' ? 'badge-presidencial' : 'badge-legislativa';
+                            
+                            // Badge estilizado para Interior o Exterior
+                            const esInterior = voto.ubicacion?.toLowerCase() === 'interior';
+                            const badgeUbicacion = esInterior ? 'badge-interior' : 'badge-exterior';
 
                             fila.innerHTML = `
-                                <td style="font-weight: bold; color: #6b7280; text-align: center;">${voto.id}</td>
-                                <td style="font-weight: 600; color: #111827;">@${escapeHTML(voto.usuario_discord)}</td>
-                                <td style="font-family: monospace; color: #374151;">${escapeHTML(voto.ip_votante)}</td>
-                                <td><span class="badge ${badgeClass}">${voto.tipo_eleccion}</span></td>
-                                <td style="color: #0369a1; font-weight: 500;">${escapeHTML(voto.opcion_marcada)}</td>
+                                <td style="font-weight: bold; color: #6b7280; text-align: center;">${voto.id || '-'}</td>
+                                <td style="font-weight: 600; color: #111827;">@${escapeHTML(voto.usuario_discord || 'Anónimo')}</td>
+                                <td style="font-weight: bold; color: #4b5563;">${escapeHTML(voto.region || 'No especificada')}</td>
+                                <td><span class="badge ${badgeUbicacion}">${escapeHTML(voto.ubicacion || 'Desconocido')}</span></td>
+                                <td><span class="badge ${badgeEleccion}">${escapeHTML(voto.tipo_eleccion || 'Presidencial')}</span></td>
+                                <td style="color: #0369a1; font-weight: 500;">${escapeHTML(voto.opcion_marcada || 'Nulo/Blanco')}</td>
+                                <td style="font-family: monospace; color: #71717a; font-size: 0.8rem;">${escapeHTML(voto.ip_votante || 'Oculta')}</td>
                                 <td style="color: #6b7280;">${formatearFecha(voto.fecha)}</td>
                             `;
                             tbody.appendChild(fila);
                         });
                     } else {
-                        tbody.innerHTML = `<tr><td colspan="6" class="loading" style="color: #dc2626;">Error: ${data.error}</td></tr>`;
+                        tbody.innerHTML = `<tr><td colspan="8" class="loading" style="color: #dc2626;">Error al leer estructura de datos.</td></tr>`;
                     }
                 })
                 .catch(err => {
-                    tbody.innerHTML = `<tr><td colspan="6" class="loading" style="color: #dc2626;">Error de red al conectar con el backend.</td></tr>`;
+                    console.error(err);
+                    tbody.innerHTML = `<tr><td colspan="8" class="loading" style="color: #dc2626;">Error de red al conectar con /api/resultados.</td></tr>`;
                 });
         }
 
-        // Seguridad básica para evitar inyecciones de texto en el HTML visible
         function escapeHTML(str) {
             return str.replace(/[&<>'"]/g, 
                 tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
             );
         }
 
-        // Formatea la fecha por defecto de SQLite a algo más legible
         function formatearFecha(fechaSQL) {
             if(!fechaSQL) return "N/A";
-            // Si viene directo del CURRENT_TIMESTAMP de SQLite, reemplazamos espacios y formatos
-            return fechaSQL.replace('T', ' ').replace('Z', '');
+            return fechaSQL.replace('T', ' ').replace('Z', '').substring(0, 19);
         }
 
-        // Ejecutar la carga apenas abra la página
         window.onload = cargarVotos;
     </script>
 </body>
 </html>
-
