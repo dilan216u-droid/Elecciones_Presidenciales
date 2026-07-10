@@ -188,3 +188,332 @@
         }
     </style>
 </head>
+
+<body>
+
+    <!-- VENTANA DE VERIFICACIÓN INICIAL -->
+    <div id="pantallaValidacion" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(26,79,124,0.95); z-index: 10000; display: flex; justify-content: center; align-items: center; font-family: Arial, sans-serif;">
+        <div style="background: white; padding: 30px; border-radius: 8px; max-width: 450px; width: 90%; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+            <h3 style="color: var(--primary-color); margin-top: 0; text-transform: uppercase; font-size: 1.2rem; letter-spacing: 0.5px;">Verificación de Seguridad</h3>
+            <p style="color: #555; font-size: 0.95rem; line-height: 1.4; margin-bottom: 20px;">
+                Before voting, the system must ensure you are a real person.
+            </p>
+            
+            <!-- Campo de Discord -->
+            <div style="text-align: left; margin-bottom: 15px;">
+                <label for="discordUser" style="display: block; font-weight: bold; color: var(--primary-color); margin-bottom: 8px; font-size: 0.9rem;">User de Discord:</label>
+                <input type="text" id="discordUser" placeholder="Ej: tu_usuario" style="width: 100%; padding: 10px; border: 1px solid #777; border-radius: 4px; box-sizing: border-box; font-size: 1rem;">
+            </div>
+
+            <!-- Campo Región -->
+            <div style="text-align: left; margin-bottom: 15px;">
+                <label for="regionSelect" style="display: block; font-weight: bold; color: var(--primary-color); margin-bottom: 8px; font-size: 0.9rem;">Región:</label>
+                <select id="regionSelect" style="width: 100%; padding: 10px; border: 1px solid #777; border-radius: 4px; box-sizing: border-box; font-size: 1rem; background: white; font-family: Arial, sans-serif;">
+                    <option value="" disabled selected>Selecciona una región...</option>
+                    <option value="Valdena">Valdena</option>
+                    <option value="Iradia">Iradia</option>
+                    <option value="Otresa">Otresa</option>
+                    <option value="Arkastra">Arkastra</option>
+                    <option value="Simósie">Simósie</option>
+                    <option value="Cirsena">Cirsena</option>
+                    <option value="Austra">Austra</option>
+                    <option value="Luva">Luva</option>
+                </select>
+            </div>
+
+            <!-- Campo Desde donde vota -->
+            <div style="text-align: left; margin-bottom: 20px;">
+                <label for="ubicacionSelect" style="display: block; font-weight: bold; color: var(--primary-color); margin-bottom: 8px; font-size: 0.9rem;">Desde donde vota:</label>
+                <select id="ubicacionSelect" style="width: 100%; padding: 10px; border: 1px solid #777; border-radius: 4px; box-sizing: border-box; font-size: 1rem; background: white; font-family: Arial, sans-serif;">
+                    <option value="" disabled selected>Selecciona tu ubicación...</option>
+                    <option value="Interior">Interior</option>
+                    <option value="Exterior">Exterior</option>
+                </select>
+            </div>
+
+            <button onclick="validarUsuario()" style="background-color: #2E7D32; color: white; border: none; padding: 12px 30px; font-size: 1rem; font-weight: bold; border-radius: 4px; cursor: pointer; text-transform: uppercase; width: 100%;">
+                Aceptar
+            </button>
+        </div>
+    </div>
+
+    <!-- VENTANA DE AGRADECIMIENTO FINAL -->
+    <div id="pantallaAgradecimiento" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10005; display: none; justify-content: center; align-items: center; font-family: Arial, sans-serif;">
+        <div style="background: white; padding: 40px 30px; border-radius: 8px; max-width: 500px; width: 90%; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+            <div style="font-size: 3.5rem; color: #2E7D32; margin-bottom: 15px;">✓</div>
+            <h2 style="color: var(--primary-color); margin-top: 0; text-transform: uppercase;">¡Gracias por votar!</h2>
+            <p style="color: #333; font-size: 1.1rem; margin-bottom: 25px;">
+                Tu intención de voto legislativo ha sido procesada correctamente por la mesa de escrutinio.
+            </p>
+            <p style="color: #666; font-size: 0.9rem; margin-bottom: 10px;">
+                Mire los resultados de las elecciones en:
+            </p>
+            <a href="/api/resultados" style="display: inline-block; color: var(--orange-alert); font-weight: bold; font-size: 1.1rem; text-decoration: none; word-break: break-all; border-bottom: 2px dashed var(--orange-alert); padding-bottom: 2px;">
+                /api/resultados
+            </a>
+        </div>
+    </div>
+
+    <!-- ENCABEZADO LEGISLATIVO -->
+    <header class="header-legislativo">
+        <h1>ELECCIONES CONGRESO Y SENADO DE LA REPÚBLICA</h1>
+        <p>VOTA POR CIRCUNSCRIPCIÓN NACIONAL DE LA REPÚBLICA</p>
+    </header>
+
+    <!-- CUADRÍCULA DEL TARJETÓN -->
+    <main class="tarjeton-legislativo">
+
+        <!-- ADL (10 Candidatos) -->
+        <div class="casilla-partido">
+            <div class="partido-top">
+                <div class="partido-logo-container" onclick="marcarVoto(this, 'Logo ADL')">
+                    <img src="https://i.ibb.co/JWb7QMKw/2094-sin-titulo-20260426190625-1.png" alt="ADL">
+                </div>
+                <div class="partido-info">
+                    <div>Partido ADL</div>
+                    <span class="tipo-lista">Voto Preferente</span>
+                </div>
+            </div>
+            <div class="grid-numeros">
+                <div class="voto-numero" onclick="marcarVoto(this, 'ADL - Número 1')">1</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'ADL - Número 2')">2</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'ADL - Número 3')">3</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'ADL - Número 4')">4</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'ADL - Número 5')">5</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'ADL - Número 6')">6</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'ADL - Número 7')">7</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'ADL - Número 8')">8</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'ADL - Número 9')">9</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'ADL - Número 10')">10</div>
+            </div>
+        </div>
+
+        <!-- CR (3 Candidatos) -->
+        <div class="casilla-partido">
+            <div class="partido-top">
+                <div class="partido-logo-container" onclick="marcarVoto(this, 'Logo CR')">
+                    <img src="https://i.ibb.co/YTcqRTCy/1-20260709-214258-0000.png" alt="CR">
+                </div>
+                <div class="partido-info">
+                    <div>Partido CR</div>
+                    <span class="tipo-lista">Voto Preferente</span>
+                </div>
+            </div>
+            <div class="grid-numeros">
+                <div class="voto-numero" onclick="marcarVoto(this, 'CR - Número 1')">1</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'CR - Número 2')">2</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'CR - Número 3')">3</div>
+            </div>
+        </div>
+
+        <!-- CS (2 Candidatos) -->
+        <div class="casilla-partido">
+            <div class="partido-top">
+                <div class="partido-logo-container" onclick="marcarVoto(this, 'Logo CS')">
+                    <img src="https://i.ibb.co/QFVDPKwT/1-20260709-213342-0000.png" alt="CS">
+                </div>
+                <div class="partido-info">
+                    <div>Partido CS</div>
+                    <span class="tipo-lista">Voto Preferente</span>
+                </div>
+            </div>
+            <div class="grid-numeros">
+                <div class="voto-numero" onclick="marcarVoto(this, 'CS - Número 1')">1</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'CS - Número 2')">2</div>
+            </div>
+        </div>
+
+        <!-- FCC (6 Candidatos) -->
+        <div class="casilla-partido">
+            <div class="partido-top">
+                <div class="partido-logo-container" onclick="marcarVoto(this, 'Logo FCC')">
+                    <img src="https://i.ibb.co/zHf1zpLK/86-sin-t-tulo-20260701233027.png" alt="FCC">
+                </div>
+                <div class="partido-info">
+                    <div>Partido FCC</div>
+                    <span class="tipo-lista">Voto Preferente</span>
+                </div>
+            </div>
+            <div class="grid-numeros">
+                <div class="voto-numero" onclick="marcarVoto(this, 'FCC - Número 1')">1</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'FCC - Número 2')">2</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'FCC - Número 3')">3</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'FCC - Número 4')">4</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'FCC - Número 5')">5</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'FCC - Número 6')">6</div>
+            </div>
+        </div>
+
+        <!-- FRENOVA (4 Candidatos) -->
+        <div class="casilla-partido">
+            <div class="partido-top">
+                <div class="partido-logo-container" onclick="marcarVoto(this, 'Logo FRENOVA')">
+                    <img src="https://i.ibb.co/zWSWhptj/1-20260708-022800-0000.png" alt="FRENOVA">
+                </div>
+                <div class="partido-info">
+                    <div>Partido FRENOVA</div>
+                    <span class="tipo-lista">Voto Preferente</span>
+                </div>
+            </div>
+            <div class="grid-numeros">
+                <div class="voto-numero" onclick="marcarVoto(this, 'FRENOVA - Número 1')">1</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'FRENOVA - Número 2')">2</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'FRENOVA - Número 3')">3</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'FRENOVA - Número 4')">4</div>
+            </div>
+        </div>
+
+        <!-- LIBERTAD Y ORDEN - LO -->
+        <div class="casilla-partido">
+            <div class="partido-top">
+                <div class="partido-logo-container" onclick="marcarVoto(this, 'Logo Libertad y Orden (LO)')">
+                    <img src="https://i.ibb.co/BH8mJKcN/20260708-022628-0000.png" alt="LO">
+                </div>
+                <div class="partido-info">
+                    <div>Libertad y Orden (LO)</div>
+                    <span class="tipo-lista">Voto Preferente</span>
+                </div>
+            </div>
+            <div class="grid-numeros">
+                <div class="voto-numero" onclick="marcarVoto(this, 'Libertad y Orden (LO) - Número 1')">1</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'Libertad y Orden (LO) - Número 2')">2</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'Libertad y Orden (LO) - Número 3')">3</div>
+            </div>
+        </div>
+
+        <!-- NUEVO MAS (4 Candidatos) -->
+        <div class="casilla-partido">
+            <div class="partido-top">
+                <div class="partido-logo-container" onclick="marcarVoto(this, 'Logo Nuevo MAS')">
+                    <img src="https://i.ibb.co/W4N9XJ9K/1-20260708-022742-0000.png" alt="MAS">
+                </div>
+                <div class="partido-info">
+                    <div>Nuevo MAS</div>
+                    <span class="tipo-lista">Voto Preferente</span>
+                </div>
+            </div>
+            <div class="grid-numeros">
+                <div class="voto-numero" onclick="marcarVoto(this, 'Nuevo MAS - Número 1')">1</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'Nuevo MAS - Número 2')">2</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'Nuevo MAS - Número 3')">3</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'Nuevo MAS - Número 4')">4</div>
+            </div>
+        </div>
+
+        <!-- PARTIDO REPUBLICANO - PR (2 Candidatos) -->
+        <div class="casilla-partido">
+            <div class="partido-top">
+                <div class="partido-logo-container" onclick="marcarVoto(this, 'Logo Partido Republicano (PR)')">
+                    <img src="https://i.ibb.co/Rk9CKW7V/1-20260708-022657-0000.png" alt="PR">
+                </div>
+                <div class="partido-info">
+                    <div>Partido Republicano (PR)</div>
+                    <span class="tipo-lista">Voto Preferente</span>
+                </div>
+            </div>
+            <div class="grid-numeros">
+                <div class="voto-numero" onclick="marcarVoto(this, 'Partido Republicano (PR) - Número 1')">1</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'Partido Republicano (PR) - Número 2')">2</div>
+            </div>
+        </div>
+
+        <!-- SC (1 Candidato) -->
+        <div class="casilla-partido">
+            <div class="partido-top">
+                <div class="partido-logo-container" onclick="marcarVoto(this, 'Logo SC')">
+                    <img src="https://i.ibb.co/DPQyzdm8/Coa-Maker-14-1-1.png" alt="SC">
+                </div>
+                <div class="partido-info">
+                    <div>Partido SC</div>
+                    <span class="tipo-lista">Voto Preferente</span>
+                </div>
+            </div>
+            <div class="grid-numeros">
+                <div class="voto-numero" onclick="marcarVoto(this, 'SC - Número 1')">1</div>
+            </div>
+        </div>
+
+        <!-- VOTO EN BLANCO -->
+        <div class="casilla-partido casilla-blanco" onclick="marcarVoto(this, 'Voto en Blanco')">
+            <div class="blanco-txt">
+                Voto en Blanco
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        let usuarioDiscord = "";
+        let regionSeleccionada = "";
+        let ubicacionSeleccionada = "";
+
+        function validarUsuario() {
+            var usuario = document.getElementById('discordUser').value.trim();
+            var region = document.getElementById('regionSelect').value;
+            var ubicacion = document.getElementById('ubicacionSelect').value;
+
+            if (usuario === "") {
+                alert("Por favor, introduce tu usuario de Discord para continuar.");
+                return;
+            }
+            if (region === "") {
+                alert("Por favor, selecciona tu Región.");
+                return;
+            }
+            if (ubicacion === "") {
+                alert("Por favor, selecciona desde dónde votas.");
+                return;
+            }
+
+            usuarioDiscord = usuario;
+            regionSeleccionada = region;
+            ubicacionSeleccionada = ubicacion;
+
+            document.getElementById('pantallaValidacion').style.display = 'none';
+        }
+
+        async function marcarVoto(elemento, descripcion) {
+            if (!usuarioDiscord || !regionSeleccionada || !ubicacionSeleccionada) {
+                alert("Primero debes completar la verificación de seguridad.");
+                document.getElementById('pantallaValidacion').style.display = 'flex';
+                return;
+            }
+
+            const votoAnterior = document.querySelector('.seleccionado');
+            if (votoAnterior) {
+                votoAnterior.classList.remove('seleccionado');
+            }
+
+            elemento.classList.add('seleccionado');
+            console.log("Opción marcada: " + descripcion);
+
+            try {
+                const respuesta = await fetch('/api/votar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        usuario_discord: usuarioDiscord,
+                        opcion_marcada: descripcion,
+                        tipo_eleccion: "Legislativas", 
+                        region: regionSeleccionada,
+                        ubicacion: ubicacionSeleccionada
+                    })
+                });
+
+                if (respuesta.ok) {
+                    setTimeout(function() {
+                        document.getElementById('pantallaAgradecimiento').style.display = 'flex';
+                    }, 550);
+                } else {
+                    alert("Hubo un error al procesar el voto.");
+                }
+            } catch (error) {
+                console.error("Error al enviar el voto:", error);
+                alert("Error de conexión. Tu voto no pudo registrarse.");
+            }
+        }
+    </script>
+
+</body>
+</html>
+    
