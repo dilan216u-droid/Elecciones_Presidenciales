@@ -1,1 +1,245 @@
 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consolidado de Resultados - Instituto Electoral Nacional</title>
+    <style>
+        :root {
+            --primary-blue: #002855; /* Azul Institucional */
+            --orange-alert: #FF6B00; /* Naranja institucional de avance */
+            --bg-gray: #ECEFF1;
+            --card-bg: #FFFFFF;
+            --text-dark: #333333;
+            --border-light: #CFD8DC;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: var(--bg-gray);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+        }
+
+        /* BARRA SUPERIOR */
+        .navbar {
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .navbar h2 {
+            margin: 0;
+            font-size: 1.3rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-volver {
+            background-color: var(--orange-alert);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+        }
+
+        .btn-volver:hover {
+            background-color: #e05e00;
+        }
+
+        /* MENÚ DE SELECCIÓN INICIAL */
+        .menu-container {
+            max-width: 800px;
+            margin: 80px auto;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .menu-container h1 {
+            color: var(--primary-blue);
+            margin-bottom: 40px;
+            font-size: 2rem;
+            text-transform: uppercase;
+        }
+
+        .grid-botones {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .btn-eleccion {
+            background-color: var(--card-bg);
+            border: 3px solid var(--primary-blue);
+            color: var(--primary-blue);
+            padding: 40px 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .btn-eleccion:hover {
+            background-color: var(--primary-blue);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        /* VISTAS DE RESULTADOS */
+        .view-section {
+            display: none;
+            max-width: 1100px;
+            margin: 20px auto;
+            padding: 15px;
+        }
+
+        /* RESUMEN DE PRECONTEO */
+        .panel-avance {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 25px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            text-align: center;
+        }
+
+        .dato-avance {
+            border-right: 1px solid var(--border-light);
+        }
+
+        .dato-avance:last-child {
+            border-right: none;
+        }
+
+        .dato-avance .numero {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: var(--primary-blue);
+        }
+
+        .dato-avance .numero.naranja {
+            color: var(--orange-alert);
+        }
+
+        .dato-avance .label {
+            font-size: 0.8rem;
+            color: #666;
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+
+        /* LISTADOS DE CANDIDATOS / PARTIDOS */
+        .resultados-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .fila-resultado {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-left: 6px solid var(--primary-blue);
+            border-radius: 4px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .candidato-perfil {
+            display: flex;
+            align-items: center;
+            width: 40%;
+        }
+
+        .candidato-foto-res {
+            width: 55px;
+            height: 65px;
+            object-fit: cover;
+            border: 1px solid var(--border-light);
+            margin-right: 15px;
+            background-color: #fafafa;
+        }
+
+        .candidato-logo-res {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            margin-right: 15px;
+        }
+
+        .candidato-nombres .name {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--primary-blue);
+        }
+
+        .candidato-nombres .party {
+            font-size: 0.8rem;
+            color: #666;
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        /* BARRAS DE PROGRESO */
+        .barra-votos-container {
+            width: 40%;
+            padding: 0 20px;
+        }
+
+        .progreso-fondo {
+            background-color: #e0e0e0;
+            height: 12px;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 5px;
+        }
+
+        .progreso-llenado {
+            background-color: var(--orange-alert);
+            height: 100%;
+        }
+
+        .votos-numericos {
+            font-size: 0.85rem;
+            color: #555;
+            font-weight: bold;
+        }
+
+        /* PORCENTAJE GRANDE */
+        .porcentaje-total {
+            width: 20%;
+            text-align: right;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-blue);
+        }
+
+        @media (max-width: 768px) {
+            .grid-botones { grid-template-columns: 1fr; }
+            .panel-avance { grid-template-columns: repeat(2, 1fr); }
+            .fila-resultado { flex-direction: column; text-align: center; }
+            .candidato-perfil { width: 100%; flex-direction: column; margin-bottom: 15px; }
+            .candidato-foto-res, .candidato-logo-res { margin-right: 0; margin-bottom: 10px; }
+            .barra-votos-container { width: 100%; padding: 0; margin-bottom: 15px; }
+            .porcentaje-total { width: 100%; text-align: center; }
+        }
+    </style>
+</head>
