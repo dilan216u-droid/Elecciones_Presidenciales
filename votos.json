@@ -208,5 +208,15 @@
     "opcion_marcada": "Manuela Castañeira - Nuevo Movimiento al Socialismo (MAS)",
     "tipo_eleccion": "Presidencial",
     "fecha": "2026-07-10T20:25:42.033Z"
+  },
+  {
+    "id": 22,
+    "usuario_discord": "Aso",
+    "region": "Valdena",
+    "ubicacion": "Interior",
+    "ip_votante": "190.95.44.113",
+    "opcion_marcada": "ADL - Número 1",
+    "tipo_eleccion": "Legislativas",
+    "fecha": "2026-07-10T20:39:54.537Z"
   }
 ]
