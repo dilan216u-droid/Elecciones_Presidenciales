@@ -248,5 +248,15 @@
     "opcion_marcada": "Donald Trump - Partido Republicano (PR)",
     "tipo_eleccion": "Presidencial",
     "fecha": "2026-07-10T22:13:05.191Z"
+  },
+  {
+    "id": 26,
+    "usuario_discord": "Uribe_el_mejor",
+    "region": "Valdena",
+    "ubicacion": "Exterior",
+    "ip_votante": "38.19.41.252",
+    "opcion_marcada": "Magno Alejandro - Libertad y Orden (LO)",
+    "tipo_eleccion": "Presidencial",
+    "fecha": "2026-07-10T23:11:46.636Z"
   }
 ]
