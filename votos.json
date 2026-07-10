@@ -6,5 +6,13 @@
     "opcion_marcada": "Donald Trump - Partido Republicano (PR)",
     "tipo_eleccion": "presidencial",
     "fecha": "2026-07-10T04:47:24.268Z"
+  },
+  {
+    "id": 2,
+    "usuario_discord": "Nakamura",
+    "ip_votante": "38.121.212.94",
+    "opcion_marcada": "Donald Trump - Partido Republicano (PR)",
+    "tipo_eleccion": "Presidencial",
+    "fecha": "2026-07-10T05:26:11.938Z"
   }
 ]
