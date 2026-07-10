@@ -98,5 +98,15 @@
     "opcion_marcada": "Partido Republicano (PR) - Número 2",
     "tipo_eleccion": "Legislativas",
     "fecha": "2026-07-10T09:05:11.294Z"
+  },
+  {
+    "id": 11,
+    "usuario_discord": "agustinnosecuanto",
+    "region": "Valdena",
+    "ubicacion": "Interior",
+    "ip_votante": "186.11.100.198",
+    "opcion_marcada": "Magno Alejandro - Libertad y Orden (LO)",
+    "tipo_eleccion": "Presidencial",
+    "fecha": "2026-07-10T11:18:43.611Z"
   }
 ]
