@@ -7,10 +7,13 @@ export default async function handler(req, res) {
   const FILE_PATH = 'votos.json';
 
   try {
-    // Leer el archivo votos.json directamente de GitHub para tener datos frescos
     const url = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`;
     const respuesta = await fetch(url, {
-      headers: { 'Authorization': `token ${TOKEN}`, 'Accept': 'application/vnd.github.v3+json' }
+      headers: { 
+        'Authorization': `token ${TOKEN}`, 
+        'Accept': 'application/vnd.github.v3+json',
+        'User-Agent': 'Vercel-Serverless-App'
+      }
     });
 
     if (respuesta.status !== 200) {
@@ -21,13 +24,12 @@ export default async function handler(req, res) {
     const contenidoTexto = Buffer.from(data.content, 'base64').toString('utf-8');
     const listaVotos = JSON.parse(contenidoTexto || '[]');
 
-    // Los ordenamos para que el más nuevo salga primero en tu Excel
     listaVotos.reverse();
 
     return res.status(200).json({ OK: true, votos: listaVotos });
 
   } catch (error) {
-    console.error(error);
+    console.error("Error al leer archivo:", error);
     return res.status(500).json({ error: 'Error al leer el archivo de votos.' });
   }
 }
