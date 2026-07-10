@@ -18,5 +18,15 @@
     "opcion_marcada": "Donald Trump - Partido Republicano (PR)",
     "tipo_eleccion": "Presidencial",
     "fecha": "2026-07-10T06:03:14.735Z"
+  },
+  {
+    "id": 3,
+    "usuario_discord": "Putita68",
+    "region": "Simósie",
+    "ubicacion": "Interior",
+    "ip_votante": "35.143.189.131",
+    "opcion_marcada": "SC - Número 1",
+    "tipo_eleccion": "Legislativas",
+    "fecha": "2026-07-10T06:11:38.668Z"
   }
 ]
