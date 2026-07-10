@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -243,3 +242,224 @@
         }
     </style>
 </head>
+
+<body>
+
+    <!-- BARRA SUPERIOR DEL INSTITUTO ELECTORAL NACIONAL -->
+    <nav class="navbar">
+        <h2>Instituto Electoral Nacional - Resultados</h2>
+        <button class="btn-volver" id="btnVolverMenu" style="display: none;" onclick="mostrarMenu()">Volver al Menú</button>
+    </nav>
+
+    <!-- MENÚ PRINCIPAL -->
+    <main class="menu-container" id="menuInicial">
+        <h1>Consolidado Nacional de Preconteo</h1>
+        <div class="grid-botones">
+            <button class="btn-eleccion" onclick="cargarResultados('presidenciales')">
+                Elecciones Presidenciales<br><small style="font-size:0.8rem; font-weight:normal;">1ªera Vuelta</small>
+            </button>
+            <button class="btn-eleccion" onclick="cargarResultados('legislativas')">
+                Elecciones Legislativas<br><small style="font-size:0.8rem; font-weight:normal;">Senado y Congreso</small>
+            </button>
+        </div>
+    </main>
+
+    <!-- VISTA 1: RESULTADOS PRESIDENCIALES -->
+    <section class="view-section" id="vistaPresidenciales">
+        <h2 style="color: var(--primary-blue); text-transform: uppercase;">Presidente y Vicepresidente - República</h2>
+        
+        <div class="panel-avance">
+            <div class="dato-avance"><div class="numero naranja">0,0%</div><div class="label">Mesas Informadas</div></div>
+            <div class="dato-avance"><div class="numero">100.840</div><div class="label">Total Mesas</div></div>
+            <div class="dato-avance"><div class="numero">0</div><div class="label">Votación Total</div></div>
+            <div class="dato-avance"><div class="numero">0,0%</div><div class="label">Participación</div></div>
+        </div>
+
+        <div class="resultados-grid">
+            <!-- Magno Alejandro -->
+            <div class="fila-resultado">
+                <div class="candidato-perfil">
+                    <img src="https://i.ibb.co/n8rzcyrV/1783455763399.jpg" alt="Magno" class="candidato-foto-res">
+                    <div class="candidato-nombres"><div class="name">Magno Alejandro</div><div class="party">Libertad y Orden (LO)</div></div>
+                </div>
+                <div class="barra-votos-container">
+                    <div class="progreso-fondo"><div class="progreso-llenado" style="width: 0.0%;"></div></div>
+                    <div class="votos-numericos">0 Votos</div>
+                </div>
+                <div class="porcentaje-total">0,0%</div>
+            </div>
+            <!-- Donald Trump -->
+            <div class="fila-resultado">
+                <div class="candidato-perfil">
+                    <img src="https://i.ibb.co/yBKnQcK5/images-1.png" alt="Trump" class="candidato-foto-res">
+                    <div class="candidato-nombres"><div class="name">Donald Trump</div><div class="party">Partido Republicano (PR)</div></div>
+                </div>
+                <div class="barra-votos-container">
+                    <div class="progreso-fondo"><div class="progreso-llenado" style="width: 0.0%;"></div></div>
+                    <div class="votos-numericos">0 Votos</div>
+                </div>
+                <div class="porcentaje-total">0,0%</div>
+            </div>
+            <!-- Manuela Castañeira -->
+            <div class="fila-resultado">
+                <div class="candidato-perfil">
+                    <img src="https://i.ibb.co/Wv5WSvmC/images-3.jpg" alt="Manuela" class="candidato-foto-res">
+                    <div class="candidato-nombres"><div class="name">Manuela Castañeira</div><div class="party">Nuevo MAS</div></div>
+                </div>
+                <div class="barra-votos-container">
+                    <div class="progreso-fondo"><div class="progreso-llenado" style="width: 0.0%;"></div></div>
+                    <div class="votos-numericos">0 Votos</div>
+                </div>
+                <div class="porcentaje-total">0,0%</div>
+            </div>
+            <!-- Blanco -->
+            <div class="fila-resultado" style="border-left-color: #777;">
+                <div class="candidato-perfil">
+                    <div style="width:55px; font-weight:bold; color:#777; text-align:center; font-size:1.5rem;">B</div>
+                    <div class="candidato-nombres"><div class="name">Voto en Blanco</div><div class="party">Votos Válidos</div></div>
+                </div>
+                <div class="barra-votos-container">
+                    <div class="progreso-fondo"><div class="progreso-llenado" style="width: 0.0%; background-color:#999;"></div></div>
+                    <div class="votos-numericos">0 Votos</div>
+                </div>
+                <div class="porcentaje-total">0,0%</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VISTA 2: RESULTADOS LEGISLATIVAS -->
+    <section class="view-section" id="vistaLegislativas">
+        <h2 style="color: var(--primary-blue); text-transform: uppercase;">Senado - Circunscripción Nacional</h2>
+        
+        <div class="panel-avance">
+            <div class="dato-avance"><div class="numero naranja">0,0%</div><div class="label">Mesas Informadas</div></div>
+            <div class="dato-avance"><div class="numero">100.840</div><div class="label">Total Mesas</div></div>
+            <div class="dato-avance"><div class="numero">0</div><div class="label">Votos Válidos</div></div>
+            <div class="dato-avance"><div class="numero">0,0%</div><div class="label">Eficacia de Voto</div></div>
+        </div>
+
+        <div class="resultados-grid">
+            <!-- ADL -->
+            <div class="fila-resultado">
+                <div class="candidato-perfil">
+                    <img src="https://i.ibb.co/JWb7QMKw/2094-sin-titulo-20260426190625-1.png" alt="ADL" class="candidato-logo-res">
+                    <div class="candidato-nombres"><div class="name">Partido ADL</div><div class="party">10 Candidatos</div></div>
+                </div>
+                <div class="barra-votos-container">
+                    <div class="progreso-fondo"><div class="progreso-llenado" style="width: 0.0%;"></div></div>
+                    <div class="votos-numericos">0 Votos</div>
+                </div>
+                <div class="porcentaje-total">0,0%</div>
+            </div>
+            <!-- FCC -->
+            <div class="fila-resultado">
+                <div class="candidato-perfil">
+                    <img src="https://i.ibb.co/zHf1zpLK/86-sin-t-tulo-20260701233027.png" alt="FCC" class="candidato-logo-res">
+                    <div class="candidato-nombres"><div class="name">Partido FCC</div><div class="party">6 Candidatos</div></div>
+                </div>
+                <div class="barra-votos-container">
+                    <div class="progreso-fondo"><div class="progreso-llenado" style="width: 0.0%;"></div></div>
+                    <div class="votos-numericos">0 Votos</div>
+                </div>
+                <div class="porcentaje-total">0,0%</div>
+            </div>
+            <!-- FRENOVA -->
+            <div class="fila-resultado">
+                <div class="candidato-perfil">
+                    <img src="https://i.ibb.co/zWSWhptj/1-20260708-022800-0000.png" alt="FRENOVA" class="candidato-logo-res">
+                    <div class="candidato-nombres"><div class="name">Partido FRENOVA</div><div class="party">4 Candidatos</div></div>
+                </div>
+                <div class="barra-votos-container">
+                    <div class="progreso-fondo"><div class="progreso-llenado" style="width: 0.0%;"></div></div>
+                    <div class="votos-numericos">0 Votos</div>
+                </div>
+                <div class="porcentaje-total">0,0%</div>
+            </div>
+            <!-- LO -->
+            <div class="fila-resultado">
+                <div class="candidato-perfil">
+                    <img src="https://i.ibb.co/BH8mJKcN/20260708-022628-0000.png" alt="LO" class="candidato-logo-res">
+                    <div class="candidato-nombres"><div class="name">Libertad y Orden (LO)</div><div class="party">3 Candidatos</div></div>
+                </div>
+                <div class="barra-votos-container">
+                    <div class="progreso-fondo"><div class="progreso-llenado" style="width: 0.0%;"></div></div>
+                    <div class="votos-numericos">0 Votos</div>
+                </div>
+                <div class="porcentaje-total">0,0%</div>
+            </div>
+            <!-- CR -->
+            <div class="fila-resultado">
+                <div class="candidato-perfil">
+                    <img src="https://i.ibb.co/YTcqRTCy/1-20260709-214258-0000.png" alt="CR" class="candidato-logo-res">
+                    <div class="candidato-nombres"><div class="name">Partido CR</div><div class="party">3 Candidatos</div></div>
+                </div>
+                <div class="barra-votos-container">
+                    <div class="progreso-fondo"><div class="progreso-llenado" style="width: 0.0%;"></div></div>
+                    <div class="votos-numericos">0 Votos</div>
+                </div>
+                <div class="porcentaje-total">0,0%</div>
+            </div>
+            <!-- CS -->
+            <div class="fila-resultado">
+                <div class="candidato-perfil">
+                    <img src="https://i.ibb.co/QFVDPKwT/1-20260709-213342-0000.png" alt="CS" class="candidato-logo-res">
+                    <div class="candidato-nombres"><div class="name">Partido CS</div><div class="party">2 Candidatos</div></div>
+                </div>
+                <div class="barra-votos-container">
+                    <div class="progreso-fondo"><div class="progreso-llenado" style="width: 0.0%;"></div></div>
+                    <div class="votos-numericos">0 Votos</div>
+                </div>
+                <div class="porcentaje-total">0,0%</div>
+            </div>
+            <!-- SC -->
+            <div class="fila-resultado">
+                <div class="candidato-perfil">
+                    <img src="https://i.ibb.co/DPQyzdm8/Coa-Maker-14-1-1.png" alt="SC" class="candidato-logo-res">
+                    <div class="candidato-nombres"><div class="name">Partido SC</div><div class="party">1 Candidato</div></div>
+                </div>
+                <div class="barra-votos-container">
+                    <div class="progreso-fondo"><div class="progreso-llenado" style="width: 0.0%;"></div></div>
+                    <div class="votos-numericos">0 Votos</div>
+                </div>
+                <div class="porcentaje-total">0,0%</div>
+            </div>
+            <!-- Blanco -->
+            <div class="fila-resultado" style="border-left-color: #777;">
+                <div class="candidato-perfil">
+                    <div style="width:50px; font-weight:bold; color:#777; text-align:center; font-size:1.2rem;">B</div>
+                    <div class="candidato-nombres"><div class="name">Voto en Blanco</div><div class="party">Votos Válidos</div></div>
+                </div>
+                <div class="barra-votos-container">
+                    <div class="progreso-fondo"><div class="progreso-llenado" style="width: 0.0%; background-color:#999;"></div></div>
+                    <div class="votos-numericos">0 Votos</div>
+                </div>
+                <div class="porcentaje-total">0,0%</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTROLADOR JAVASCRIPT -->
+    <script>
+        function cargarResultados(tipoEleccion) {
+            document.getElementById('menuInicial').style.display = 'none';
+            document.getElementById('btnVolverMenu').style.display = 'block';
+
+            if(tipoEleccion === 'presidenciales') {
+                document.getElementById('vistaPresidenciales').style.display = 'block';
+                document.getElementById('vistaLegislativas').style.display = 'none';
+            } else if(tipoEleccion === 'legislativas') {
+                document.getElementById('vistaLegislativas').style.display = 'block';
+                document.getElementById('vistaPresidenciales').style.display = 'none';
+            }
+        }
+
+        function mostrarMenu() {
+            document.getElementById('menuInicial').style.display = 'block';
+            document.getElementById('vistaPresidenciales').style.display = 'none';
+            document.getElementById('vistaLegislativas').style.display = 'none';
+            document.getElementById('btnVolverMenu').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
+
