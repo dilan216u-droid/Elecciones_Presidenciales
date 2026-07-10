@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarjeta Electoral - Elecciones Legislativas</title>
+    <style>
+        :root {
+            --primary-color: #1a4f7c;
+            --bg-color: #f0f2f5;
+            --border-color: #444;
+            --text-color: #222;
+            --x-color: rgba(211, 47, 47, 0.85);
+        }
+
+        body {
+            font-family: 'Arial Black', 'Arial', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header-legislativo {
+            text-align: center;
+            border: 3px solid var(--border-color);
+            background: #fff;
+            padding: 15px;
+            width: 100%;
+            max-width: 1100px;
+            box-sizing: border-box;
+            margin-bottom: 25px;
+        }
+
+        .header-legislativo h1 {
+            margin: 0;
+            font-size: 1.6rem;
+            color: var(--primary-color);
+            text-transform: uppercase;
+        }
+
+        .header-legislativo p {
+            margin: 5px 0 0 0;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+        }
+
+        .tarjeton-legislativo {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1100px;
+            box-sizing: border-box;
+        }
+
+        .casilla-partido {
+            background: #fff;
+            border: 3px solid var(--border-color);
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            min-height: 220px;
+        }
+
+        .partido-top {
+            display: flex;
+            align-items: center;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+        }
+
+        .partido-logo-container {
+            width: 70px;
+            height: 70px;
+            border: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            background: #fafafa;
+            position: relative;
+        }
+
+        .partido-logo-container img {
+            width: 90%;
+            height: 90%;
+            object-fit: contain;
+        }
+
+        .partido-info {
+            flex-grow: 1;
+            padding-left: 10px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+
+        .tipo-lista {
+            font-size: 0.7rem;
+            background: #e1e1e1;
+            padding: 2px 4px;
+            display: inline-block;
+            margin-top: 4px;
+            font-family: Arial, sans-serif;
+        }
+
+        .grid-numeros {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
+            flex-grow: 1;
+            align-content: start;
+        }
+
+        .voto-numero {
+            border: 1px solid #777;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            background: #fff;
+            user-select: none;
+            aspect-ratio: 1;
+            position: relative;
+        }
+
+        .voto-numero:hover, .partido-logo-container:hover {
+            background-color: #ffe699; 
+            border-color: #000;
+        }
+
+        .casilla-blanco {
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            background: #fafafa;
+            border: 3px dashed var(--border-color);
+            position: relative;
+        }
+
+        .casilla-blanco:hover { background-color: #ffe699; }
+        .blanco-txt { font-size: 1.4rem; text-transform: uppercase; text-align: center; }
+
+        /* Cruz de votación */
+        .seleccionado::before, .seleccionado::after {
+            content: "";
+            position: absolute;
+            width: 4px;
+            height: 100%;
+            background-color: var(--x-color);
+            top: 0;
+            left: calc(50% - 2px);
+            z-index: 10;
+        }
+        .seleccionado::before { transform: rotate(45deg); }
+        .seleccionado::after { transform: rotate(-45deg); }
+
+        .casilla-blanco.seleccionado::before, .casilla-blanco.seleccionado::after {
+            height: 80%;
+            top: 10%;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PANTALLA VALIDACIÓN DISCORD -->
+    <div id="pantallaValidacion" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(26,79,124,0.95); z-index: 10000; display: flex; justify-content: center; align-items: center; font-family: Arial, sans-serif;">
+        <div style="background: white; padding: 30px; border-radius: 8px; max-width: 450px; width: 90%; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+            <h3 style="color: var(--primary-color); margin-top: 0; text-transform: uppercase; font-size: 1.2rem;">Verificación de Seguridad</h3>
+            <p style="color: #555; font-size: 0.95rem; margin-bottom: 20px;">Introduce tu usuario de Discord para validar tu voto.</p>
+            <div style="text-align: left; margin-bottom: 20px;">
+                <label for="discordUser" style="display: block; font-weight: bold; color: var(--primary-color); margin-bottom: 8px;">User de Discord:</label>
+                <input type="text" id="discordUser" placeholder="Ej: tu_usuario" style="width: 100%; padding: 10px; border: 1px solid #777; border-radius: 4px; box-sizing: border-box; font-size: 1rem;">
+            </div>
+            <button onclick="validarUsuario()" style="background-color: #2E7D32; color: white; border: none; padding: 12px 30px; font-size: 1rem; font-weight: bold; border-radius: 4px; cursor: pointer; text-transform: uppercase; width: 100%;">Aceptar</button>
+        </div>
+    </div>
+
+    <!-- PANTALLA AGRADECIMIENTO -->
+    <div id="pantallaAgradecimiento" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10005; display: none; justify-content: center; align-items: center; font-family: Arial, sans-serif;">
+        <div style="background: white; padding: 40px 30px; border-radius: 8px; max-width: 500px; width: 90%; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+            <div style="font-size: 3.5rem; color: #2E7D32; margin-bottom: 15px;">✓</div>
+            <h2 style="color: var(--primary-color); margin-top: 0; text-transform: uppercase;">¡Gracias por votar!</h2>
+            <p style="color: #333; font-size: 1.1rem; margin-bottom: 25px;">Tu intención de voto parlamentario ha sido procesada correctamente.</p>
+        </div>
+    </div>
+
+    <header class="header-legislativo">
+        <h1>ELECCIONES CONGRESO Y SENADO DE LA REPÚBLICA</h1>
+        <p>VOTA POR CIRCUNSCRIPCIÓN NACIONAL DE LA REPÚBLICA</p>
+    </header>
+
+    <main class="tarjeton-legislativo">
+        <!-- ADL -->
+        <div class="casilla-partido">
+            <div class="partido-top">
+                <div class="partido-logo-container" onclick="marcarVoto(this, 'Voto No Preferente - Partido ADL')">
+                    <img src="https://i.ibb.co/JWb7QMKw/2094-sin-titulo-20260426190625-1.png" alt="ADL">
+                </div>
+                <div class="partido-info"><div>Partido ADL</div><span class="tipo-lista">Voto Preferente</span></div>
+            </div>
+            <div class="grid-numeros">
+                <div class="voto-numero" onclick="marcarVoto(this, 'Partido ADL - Número 1')">1</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'Partido ADL - Número 2')">2</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'Partido ADL - Número 3')">3</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'Partido ADL - Número 4')">4</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'Partido ADL - Número 5')">5</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'Partido ADL - Número 6')">6</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'Partido ADL - Número 7')">7</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'Partido ADL - Número 8')">8</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'Partido ADL - Número 9')">9</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'Partido ADL - Número 10')">10</div>
+            </div>
+        </div>
+
+        <!-- CR -->
+        <div class="casilla-partido">
+            <div class="partido-top">
+                <div class="partido-logo-container" onclick="marcarVoto(this, 'Voto No Preferente - Partido CR')">
+                    <img src="https://i.ibb.co/YTcqRTCy/1-20260709-214258-0000.png" alt="CR">
+                </div>
+                <div class="partido-info"><div>Partido CR</div><span class="tipo-lista">Voto Preferente</span></div>
+            </div>
+            <div class="grid-numeros">
+                <div class="voto-numero" onclick="marcarVoto(this, 'Partido CR - Número 1')">1</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'Partido CR - Número 2')">2</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'Partido CR - Número 3')">3</div>
+            </div>
+        </div>
+
+        <!-- CS -->
+        <div class="casilla-partido">
+            <div class="partido-top">
+                <div class="partido-logo-container" onclick="marcarVoto(this, 'Voto No Preferente - Partido CS')">
+                    <img src="https://i.ibb.co/QFVDPKwT/1-20260709-213342-0000.png" alt="CS">
+                </div>
+                <div class="partido-info"><div>Partido CS</div><span class="tipo-lista">Voto Preferente</span></div>
+            </div>
+            <div class="grid-numeros">
+                <div class="voto-numero" onclick="marcarVoto(this, 'Partido CS - Número 1')">1</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'Partido CS - Número 2')">2</div>
+            </div>
+        </div>
+
+        <!-- FCC -->
+        <div class="casilla-partido">
+            <div class="partido-top">
+                <div class="partido-logo-container" onclick="marcarVoto(this, 'Voto No Preferente - Partido FCC')">
+                    <img src="https://i.ibb.co/zHf1zpLK/86-sin-t-tulo-20260701233027.png" alt="FCC">
+                </div>
+                <div class="partido-info"><div>Partido FCC</div><span class="tipo-lista">Voto Preferente</span></div>
+            </div>
+            <div class="grid-numeros">
+                <div class="voto-numero" onclick="marcarVoto(this, 'Partido FCC - Número 1')">1</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'Partido FCC - Número 2')">2</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'Partido FCC - Número 3')">3</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'Partido FCC - Número 4')">4</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'Partido FCC - Número 5')">5</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'Partido FCC - Número 6')">6</div>
+            </div>
+        </div>
+
+        <!-- FRENOVA -->
+        <div class="casilla-partido">
+            <div class="partido-top">
+                <div class="partido-logo-container" onclick="marcarVoto(this, 'Voto No Preferente - Partido FRENOVA')">
+                    <img src="https://i.ibb.co/zWSWhptj/1-20260708-022800-0000.png" alt="FRENOVA">
+                </div>
+                <div class="partido-info"><div>Partido FRENOVA</div><span class="tipo-lista">Voto Preferente</span></div>
+            </div>
+            <div class="grid-numeros">
+                <div class="voto-numero" onclick="marcarVoto(this, 'Partido FRENOVA - Número 1')">1</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'Partido FRENOVA - Número 2')">2</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'Partido FRENOVA - Número 3')">3</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'Partido FRENOVA - Número 4')">4</div>
+            </div>
+        </div>
+
+        <!-- LO -->
+        <div class="casilla-partido">
+            <div class="partido-top">
+                <div class="partido-logo-container" onclick="marcarVoto(this, 'Voto No Preferente - Libertad y Orden (LO)')">
+                    <img src="https://i.ibb.co/BH8mJKcN/20260708-022628-0000.png" alt="LO">
+                </div>
+                <div class="partido-info"><div>Libertad y Orden (LO)</div><span class="tipo-lista">Voto Preferente</span></div>
+            </div>
+            <div class="grid-numeros">
+                <div class="voto-numero" onclick="marcarVoto(this, 'Libertad y Orden (LO) - Número 1')">1</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'Libertad y Orden (LO) - Número 2')">2</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'Libertad y Orden (LO) - Número 3')">3</div>
+            </div>
+        </div>
+
+        <!-- NUEVO MAS -->
+        <div class="casilla-partido">
+            <div class="partido-top">
+                <div class="partido-logo-container" onclick="marcarVoto(this, 'Voto No Preferente - Nuevo MAS')">
+                    <img src="https://i.ibb.co/W4N9XJ9K/1-20260708-022742-0000.png" alt="MAS">
+                </div>
+                <div class="partido-info"><div>Nuevo MAS</div><span class="tipo-lista">Voto Preferente</span></div>
+            </div>
+            <div class="grid-numeros">
+                <div class="voto-numero" onclick="marcarVoto(this, 'Nuevo MAS - Número 1')">1</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'Nuevo MAS - Número 2')">2</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'Nuevo MAS - Número 3')">3</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'Nuevo MAS - Número 4')">4</div>
+            </div>
+        </div>
+
+        <!-- PR -->
+        <div class="casilla-partido">
+            <div class="partido-top">
+                <div class="partido-logo-container" onclick="marcarVoto(this, 'Voto No Preferente - Partido Republicano (PR)')">
+                    <img src="https://i.ibb.co/Rk9CKW7V/1-20260708-022657-0000.png" alt="PR">
+                </div>
+                <div class="partido-info"><div>Partido Republicano (PR)</div><span class="tipo-lista">Voto Preferente</span></div>
+            </div>
+            <div class="grid-numeros">
+                <div class="voto-numero" onclick="marcarVoto(this, 'Partido Republicano (PR) - Número 1')">1</div>
+                <div class="voto-numero" onclick="marcarVoto(this, 'Partido Republicano (PR) - Número 2')">2</div>
+            </div>
+        </div>
+
+        <!-- SC -->
+        <div class="casilla-partido">
+            <div class="partido-top">
+                <div class="partido-logo-container" onclick="marcarVoto(this, 'Voto No Preferente - Partido SC')">
+                    <img src="https://i.ibb.co/DPQyzdm8/Coa-Maker-14-1-1.png" alt="SC">
+                </div>
+                <div class="partido-info"><div>Partido SC</div><span class="tipo-lista">Voto Preferente</span></div>
+            </div>
+            <div class="grid-numeros">
+                <div class="voto-numero" onclick="marcarVoto(this, 'Partido SC - Número 1')">1</div>
+            </div>
+        </div>
+
+        <!-- VOTO EN BLANCO -->
+        <div class="casilla-partido casilla-blanco" onclick="marcarVoto(this, 'Voto en Blanco Legislativo')">
+            <div class="blanco-txt">Voto en Blanco</div>
+        </div>
+    </main>
+
+    <script {timestamp=1783656973}>
+        let usuarioDiscord = "";
+
+        function validarUsuario() {
+            var usuario = document.getElementById('discordUser').value.trim();
+            if (usuario === "") {
+                alert("Por favor, introduce tu usuario de Discord.");
+            } else {
+                usuarioDiscord = usuario;
+                document.getElementById('pantallaValidacion').style.display = 'none';
+            }
+        }
+
+        function marcarVoto(elemento, descripcion) {
+            const votoAnterior = document.querySelector('.seleccionado');
+            if (votoAnterior) { votoAnterior.classList.remove('seleccionado'); }
+            elemento.classList.add('seleccionado');
+
+            // Apunta automáticamente al API universal
+            fetch('/api/votar', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    usuario_discord: usuarioDiscord,
+                    opcion_marcada: descripcion,
+                    tipo_eleccion: 'legislativa'
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.OK) {
+                    setTimeout(function() {
+                        document.getElementById('pantallaAgradecimiento').style.display = 'flex';
+                    }, 550);
+                } else {
+                    alert("Error guardando el voto en Turso: " + data.error);
+                }
+            })
+            .catch(err => alert("Error de red al procesar el voto parlamentario."));
+        }
+    </script>
+</body>
+</html>
+
