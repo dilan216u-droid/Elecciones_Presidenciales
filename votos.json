@@ -68,5 +68,15 @@
     "opcion_marcada": "Partido Republicano (PR) - Número 2",
     "tipo_eleccion": "Legislativas",
     "fecha": "2026-07-10T08:59:06.122Z"
+  },
+  {
+    "id": 8,
+    "usuario_discord": "Metis",
+    "region": "Otresa",
+    "ubicacion": "Interior",
+    "ip_votante": "85.87.120.97",
+    "opcion_marcada": "Donald Trump - Partido Republicano (PR)",
+    "tipo_eleccion": "Presidencial",
+    "fecha": "2026-07-10T08:59:28.720Z"
   }
 ]
