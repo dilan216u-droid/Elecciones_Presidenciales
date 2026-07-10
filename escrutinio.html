@@ -51,7 +51,6 @@
             background-color: #0b5931;
         }
 
-        /* Estilos Estilo Excel */
         .excel-table-container {
             background: #ffffff;
             border: 1px solid #d1d5db;
@@ -92,7 +91,6 @@
             background-color: #f3f4f6;
         }
 
-        /* Tags para identificar rápido */
         .badge {
             padding: 3px 8px;
             border-radius: 12px;
@@ -120,7 +118,7 @@
         <header>
             <div>
                 <h1>📊 Libro de Escrutinio Automatizado (Vercel API)</h1>
-                <p style="margin: 5px 0 0 0; color: #6b7280; font-size: 0.9rem;">Auditoría de auditoría en vivo. Monitoreo de regiones y procedencia de voto.</p>
+                <p style="margin: 5px 0 0 0; color: #6b7280; font-size: 0.9rem;">Auditoría en vivo. Monitoreo de regiones y procedencia de voto.</p>
             </div>
             <button class="btn-refresh" onclick="cargarVotos()">🔄 Actualizar Datos</button>
         </header>
@@ -149,7 +147,6 @@
     </div>
 
     <script>
-        // Función que va a la API de Vercel a traer el listado seguro de auditoría
         function cargarVotos() {
             const tbody = document.getElementById('cuerpoTabla');
             
@@ -166,13 +163,10 @@
                             return;
                         }
 
-                        // Iteramos e insertamos las nuevas columnas mapeadas
                         listaVotos.forEach(voto => {
                             const fila = document.createElement('tr');
                             
                             const badgeEleccion = voto.tipo_eleccion?.toLowerCase() === 'presidencial' ? 'badge-presidencial' : 'badge-legislativa';
-                            
-                            // Badge estilizado para Interior o Exterior
                             const esInterior = voto.ubicacion?.toLowerCase() === 'interior';
                             const badgeUbicacion = esInterior ? 'badge-interior' : 'badge-exterior';
 
