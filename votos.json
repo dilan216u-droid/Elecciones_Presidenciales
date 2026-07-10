@@ -368,5 +368,15 @@
     "opcion_marcada": "Magno Alejandro - Libertad y Orden (LO)",
     "tipo_eleccion": "Presidencial",
     "fecha": "2026-07-10T23:28:06.458Z"
+  },
+  {
+    "id": 38,
+    "usuario_discord": "@strack7404",
+    "region": "Valdena",
+    "ubicacion": "Interior",
+    "ip_votante": "167.0.255.121",
+    "opcion_marcada": "Donald Trump - Partido Republicano (PR)",
+    "tipo_eleccion": "Presidencial",
+    "fecha": "2026-07-10T23:36:51.439Z"
   }
 ]
