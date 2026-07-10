@@ -128,5 +128,15 @@
     "opcion_marcada": "Voto en Blanco",
     "tipo_eleccion": "Presidencial",
     "fecha": "2026-07-10T11:56:47.712Z"
+  },
+  {
+    "id": 14,
+    "usuario_discord": "evg_1721",
+    "region": "Austra",
+    "ubicacion": "Interior",
+    "ip_votante": "191.95.18.31",
+    "opcion_marcada": "Voto en Blanco",
+    "tipo_eleccion": "Legislativas",
+    "fecha": "2026-07-10T11:57:27.295Z"
   }
 ]
