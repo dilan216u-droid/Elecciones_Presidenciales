@@ -1,105 +1,386 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sistema de Votación</title>
-  <style>
-    body { font-family: Arial, sans-serif; max-width: 600px; margin: 20px auto; padding: 10px; }
-    .campo-grupo { margin-bottom: 15px; }
-    label { display: block; font-weight: bold; margin-bottom: 5px; }
-    input[type="text"], select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
-    .tarjeta-candidato { border: 2px solid #ccc; padding: 15px; margin-bottom: 10px; border-radius: 8px; cursor: pointer; text-align: center; }
-    .tarjeta-candidato.seleccionada { border-color: #0070f3; background-color: #f0f7ff; }
-    button { width: 100%; padding: 12px; background: #0070f3; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; }
-    button:hover { background: #0051a8; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarjeta Electoral</title>
+    <style>
+        :root {
+            --primary-color: #003366; /* Azul institucional */
+            --bg-color: #f4f4f9;
+            --card-border: #ccc;
+            --text-color: #333;
+            --x-color: rgba(211, 47, 47, 0.85); /* Color rojo para la X de votación */
+            --orange-alert: #FF6B00;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Encabezado institucional estilo Registraduría */
+        .header-electoral {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px double var(--primary-color);
+            padding-bottom: 15px;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        .header-electoral h1 {
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            margin: 5px 0;
+            color: var(--primary-color);
+        }
+
+        .header-electoral p {
+            margin: 5px 0;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        /* Contenedor principal en cuadrícula (Grid) */
+        .tarjeton-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1000px;
+            padding: 10px;
+        }
+
+        /* Cada tarjeta de candidato/partido */
+        .opcion-voto {
+            background: #fff;
+            border: 2px solid var(--card-border);
+            border-radius: 6px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s;
+            position: relative;
+            overflow: hidden; /* Evita que las líneas de la X se salgan del recuadro */
+        }
+
+        /* Efecto al pasar el mouse (simulando selección) */
+        .opcion-voto:hover {
+            transform: scale(1.02);
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Elementos internos de la tarjeta */
+        .logo-partido {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+
+        .foto-candidato {
+            width: 110px;
+            height: 130px;
+            object-fit: cover;
+            border: 1px solid #ddd;
+            background-color: #fafafa;
+            margin-bottom: 10px;
+        }
+
+        .info-candidato {
+            width: 100%;
+        }
+
+        .nombre-partido {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: #666;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .nombre-candidato {
+            font-size: 1rem;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+
+        /* El número grande en la esquina */
+        .numero-tarjeta {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            background: #e0e0e0;
+            padding: 2px 8px;
+            border-radius: 3px;
+            z-index: 5;
+        }
+
+        /* Casilla específica para el Voto en Blanco */
+        .voto-blanco {
+            background: #fdfdfd;
+            border: 2px dashed #999;
+            min-height: 260px; /* Mantiene la proporción visual */
+        }
+        
+        .voto-blanco .contenido-blanco {
+            margin: auto;
+            font-weight: bold;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            color: #555;
+        }
+
+        /* ESTILOS PARA DIBUJAR LA EXIS (X) DE VOTACIÓN */
+        .seleccionado::before, .seleccionado::after {
+            content: "";
+            position: absolute;
+            width: 6px; /* Grosor del trazo */
+            height: 150%; /* Altura suficiente para cubrir las diagonales */
+            background-color: var(--x-color);
+            top: -25%;
+            left: calc(50% - 3px);
+            z-index: 10;
+            pointer-events: none; /* Permite que no interfiera si se vuelve a clickear */
+        }
+
+        .seleccionado::before {
+            transform: rotate(41deg);
+        }
+
+        .seleccionado::after {
+            transform: rotate(-41deg);
+        }
+    </style>
 </head>
 <body>
 
-  <h2>Tarjetón Electoral</h2>
+    <!-- VENTANA DE VERIFICACIÓN INICIAL (DISCORD + REGIONES + DESDE DONDE VOTA) -->
+    <div id="pantallaValidacion" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,51,102,0.95); z-index: 10000; display: flex; justify-content: center; align-items: center;">
+        <div style="background: white; padding: 30px; border-radius: 8px; max-width: 450px; width: 90%; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+            <h3 style="color: var(--primary-color); margin-top: 0; text-transform: uppercase; font-size: 1.2rem; letter-spacing: 0.5px;">Verificación de Seguridad</h3>
+            <p style="color: #555; font-size: 0.95rem; line-height: 1.4; margin-bottom: 20px;">
+                Antes de votar, el sistema debe asegurar que eres una persona real.
+            </p>
+            
+            <!-- Campo Usuario de Discord -->
+            <div style="text-align: left; margin-bottom: 15px;">
+                <label for="discordUser" style="display: block; font-weight: bold; color: var(--primary-color); margin-bottom: 8px; font-size: 0.9rem;">User de Discord:</label>
+                <input type="text" id="discordUser" placeholder="Ej: tu_usuario" style="width: 100%; padding: 10px; border: 1px solid var(--card-border); border-radius: 4px; box-sizing: border-box; font-size: 1rem;">
+            </div>
 
-  <div class="campo-grupo">
-    <label for="usuario_discord">Usuario de Discord:</label>
-    <input type="text" id="usuario_discord" placeholder="Ej: usuario#0000 o nombre_usuario">
-  </div>
+            <!-- Campo Región -->
+            <div style="text-align: left; margin-bottom: 15px;">
+                <label for="regionSelect" style="display: block; font-weight: bold; color: var(--primary-color); margin-bottom: 8px; font-size: 0.9rem;">Región:</label>
+                <select id="regionSelect" style="width: 100%; padding: 10px; border: 1px solid var(--card-border); border-radius: 4px; box-sizing: border-box; font-size: 1rem; background: white;">
+                    <option value="" disabled selected>Selecciona una región...</option>
+                    <option value="Valdena">Valdena</option>
+                    <option value="Iradia">Iradia</option>
+                    <option value="Otresa">Otresa</option>
+                    <option value="Arkastra">Arkastra</option>
+                    <option value="Simósie">Simósie</option>
+                    <option value="Cirsena">Cirsena</option>
+                    <option value="Austra">Austra</option>
+                    <option value="Luva">Luva</option>
+                </select>
+            </div>
 
-  <div class="campo-grupo">
-    <label for="region">Región:</label>
-    <select id="region">
-      <option value="" disabled selected>Selecciona tu región...</option>
-      <option value="Valdena">Valdena</option>
-      <option value="Iradia">Iradia</option>
-      <option value="Otresa">Otresa</option>
-      <option value="Arkastra">Arkastra</option>
-      <option value="Simósie">Simósie</option>
-      <option value="Cirsena">Cirsena</option>
-      <option value="Austra">Austra</option>
-      <option value="Luva">Luva</option>
-    </select>
-  </div>
+            <!-- Campo Desde donde vota -->
+            <div style="text-align: left; margin-bottom: 20px;">
+                <label for="ubicacionSelect" style="display: block; font-weight: bold; color: var(--primary-color); margin-bottom: 8px; font-size: 0.9rem;">Desde donde vota:</label>
+                <select id="ubicacionSelect" style="width: 100%; padding: 10px; border: 1px solid var(--card-border); border-radius: 4px; box-sizing: border-box; font-size: 1rem; background: white;">
+                    <option value="" disabled selected>Selecciona tu ubicación...</option>
+                    <option value="Interior">Interior</option>
+                    <option value="Exterior">Exterior</option>
+                </select>
+            </div>
 
-  <div class="campo-grupo">
-    <label for="ubicacion_voto">Desde donde vota:</label>
-    <select id="ubicacion_voto">
-      <option value="" disabled selected>Selecciona tu ubicación...</option>
-      <option value="Interior">Interior</option>
-      <option value="Exterior">Exterior</option>
-    </select>
-  </div>
-
-  <h3>Candidatos</h3>
-  <div id="candidatos-container">
-    <div class="tarjeta-candidato" onclick="seleccionarCandidato('Magno Alejandro')">
-      <h4>Magno Alejandro</h4>
-      <p>LIBERTAD Y ORDEN (LO)</p>
+            <button onclick="validarUsuario()" style="background-color: #2E7D32; color: white; border: none; padding: 12px 30px; font-size: 1rem; font-weight: bold; border-radius: 4px; cursor: pointer; text-transform: uppercase; width: 100%;">
+                Aceptar
+            </button>
+        </div>
     </div>
-    <div class="tarjeta-candidato" onclick="seleccionarCandidato('Donald Trump')">
-      <h4>Donald Trump</h4>
-      <p>PARTIDO REPUBLICANO (PR)</p>
+
+    <!-- VENTANA DE AGRADECIMIENTO FINAL (CON TU ENLACE DE RESULTADOS CORREGIDO) -->
+    <div id="pantallaAgradecimiento" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10005; display: none; justify-content: center; align-items: center;">
+        <div style="background: white; padding: 40px 30px; border-radius: 8px; max-width: 500px; width: 90%; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+            <div style="font-size: 3.5rem; color: #2E7D32; margin-bottom: 15px;">✓</div>
+            <h2 style="color: var(--primary-color); margin-top: 0; text-transform: uppercase;">¡Gracias por votar!</h2>
+            <p style="color: #333; font-size: 1.1rem; margin-bottom: 25px;">
+                Tu intención de voto ha sido procesada correctamente por la mesa de escrutinio.
+            </p>
+            <p style="color: #666; font-size: 0.9rem; margin-bottom: 10px;">
+                Mire los resultados de las elecciones en:
+            </p>
+            <!-- Coloca aquí tu URL real de Vercel/Resultados tanto en el href como en el texto -->
+            <a href="/api/resultados" style="display: inline-block; color: var(--orange-alert); font-weight: bold; font-size: 1.1rem; text-decoration: none; word-break: break-all; border-bottom: 2px dashed var(--orange-alert); padding-bottom: 2px;">
+                /api/resultados
+            </a>
+        </div>
     </div>
-  </div>
 
-  <button onclick="enviarVoto()">Registrar Voto</button>
+    <!-- ENCABEZADO DE LA PAPELETA -->
+    <header class="header-electoral">
+        <h1>Elecciones Presidenciales 1ªera Vuelta</h1>
+        <p>TARJETA ELECTORAL</p>
+        <small>Seleccione una sola opción de voto</small>
+    </header>
 
-  <script>
-    let opcionSeleccionada = "";
+    <!-- CUADRÍCULA DE CANDIDATOS -->
+    <main class="tarjeton-grid">
 
-    function seleccionarCandidato(nombre) {
-      document.querySelectorAll('.tarjeta-candidato').forEach(el => el.classList.remove('seleccionada'));
-      opcionSeleccionada = nombre;
-      event.currentTarget.classList.add('seleccionada');
-    }
+        <!-- Opción 01: Magno Alejandro -->
+        <div class="opcion-voto" onclick="seleccionarOpcion(this, 1, 'Magno Alejandro - Libertad y Orden (LO)')">
+            <span class="numero-tarjeta">01</span>
+            
+            <!-- Logo del Partido -->
+            <img src="https://i.ibb.co/BH8mJKcN/20260708-022628-0000.png" alt="Logo Libertad y Orden" class="logo-partido">
+            
+            <!-- Foto del Candidato -->
+            <img src="https://i.ibb.co/n8rzcyrV/1783455763399.jpg" alt="Foto Magno Alejandro" class="foto-candidato">
+            
+            <div class="info-candidato">
+                <div class="nombre-partido">Libertad y Orden (LO)</div>
+                <div class="nombre-candidato">Magno Alejandro</div>
+            </div>
+        </div>
 
-    async function enviarVoto() {
-      const usuario = document.getElementById('usuario_discord').value.trim();
-      const region = document.getElementById('region').value;
-      const ubicacion = document.getElementById('ubicacion_voto').value;
+        <!-- Opción 02: Donald Trump -->
+        <div class="opcion-voto" onclick="seleccionarOpcion(this, 2, 'Donald Trump - Partido Republicano (PR)')">
+            <span class="numero-tarjeta">02</span>
+            
+            <!-- Logo del Partido -->
+            <img src="https://i.ibb.co/Rk9CKW7V/1-20260708-022657-0000.png" alt="Logo Partido Republicano" class="logo-partido">
+            
+            <!-- Foto del Candidato -->
+            <img src="https://i.ibb.co/yBKnQcK5/images-1.png" alt="Foto Donald Trump" class="foto-candidato">
+            
+            <div class="info-candidato">
+                <div class="nombre-partido">Partido Republicano (PR)</div>
+                <div class="nombre-candidato">Donald Trump</div>
+            </div>
+        </div>
 
-      if (!usuario || !opcionSeleccionada || !region || !ubicacion) {
-        alert("Por favor, completa todos los campos y selecciona un candidato.");
-        return;
-      }
+        <!-- Opción 03: Manuela Castañeira -->
+        <div class="opcion-voto" onclick="seleccionarOpcion(this, 3, 'Manuela Castañeira - Nuevo Movimiento al Socialismo (MAS)')">
+            <span class="numero-tarjeta">03</span>
+            
+            <!-- Logo del Partido -->
+            <img src="https://i.ibb.co/W4N9XJ9K/1-20260708-022742-0000.png" alt="Logo Nuevo MAS" class="logo-partido">
+            
+            <!-- Foto de la Candidata -->
+            <img src="https://i.ibb.co/Wv5WSvmC/images-3.jpg" alt="Foto Manuela Castañeira" class="foto-candidato">
+            
+            <div class="info-candidato">
+                <div class="nombre-partido">Nuevo Movimiento al Socialismo (MAS)</div>
+                <div class="nombre-candidato">Manuela Castañeira</div>
+            </div>
+        </div>
 
-      const respuesta = await fetch('/api/votar', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          usuario_discord: usuario,
-          opcion_marcada: opcionSeleccionada,
-          tipo_eleccion: "Presidencial",
-          region: region,
-          ubicacion: ubicacion // Enviamos el nuevo parámetro a la API
-        })
-      });
+        <!-- VOTO EN BLANCO -->
+        <div class="opcion-voto voto-blanco" onclick="seleccionarOpcion(this, 'BLANCO', 'Voto en Blanco')">
+            <div class="contenido-blanco">
+                Voto en Blanco
+            </div>
+        </div>
 
-      if (respuesta.ok) {
-        alert("¡Voto registrado con éxito! Serás redirigido a la página de resultados.");
-        window.location.href = "/api/resultados"; 
-      } else {
-        alert("Hubo un problema al procesar tu voto.");
-      }
-    }
-  </script>
+    </main>
+
+    <script>
+        // Variables globales para guardar los datos de validación
+        let usuarioDiscord = "";
+        let regionSeleccionada = "";
+        let ubicacionSeleccionada = "";
+
+        // Bloquea el tarjetón hasta que pasen la validación inicial con todos los campos llenos
+        function validarUsuario() {
+            var usuario = document.getElementById('discordUser').value.trim();
+            var region = document.getElementById('regionSelect').value;
+            var ubicacion = document.getElementById('ubicacionSelect').value;
+
+            if (usuario === "") {
+                alert("Por favor, introduce tu usuario de Discord para continuar.");
+                return;
+            }
+            if (region === "") {
+                alert("Por favor, selecciona tu Región.");
+                return;
+            }
+            if (ubicacion === "") {
+                alert("Por favor, selecciona desde dónde votas.");
+                return;
+            }
+
+            // Guardamos los datos validados en las variables globales
+            usuarioDiscord = usuario;
+            regionSeleccionada = region;
+            ubicacionSeleccionada = ubicacion;
+
+            document.getElementById('pantallaValidacion').style.display = 'none';
+        }
+
+        async function seleccionarOpcion(elemento, numero, descripcion) {
+            // Evitamos que voten sin validar por si acaso
+            if (!usuarioDiscord || !regionSeleccionada || !ubicacionSeleccionada) {
+                alert("Primero debes completar la verificación de seguridad.");
+                document.getElementById('pantallaValidacion').style.display = 'flex';
+                return;
+            }
+
+            // Elimina la X del candidato seleccionado previamente
+            const seleccionPrevia = document.querySelector('.seleccionado');
+            if (seleccionPrevia) {
+                seleccionPrevia.classList.remove('seleccionado');
+            }
+
+            // Añade la clase al elemento clickeado para mostrar la X
+            elemento.classList.add('seleccionado');
+
+            console.log("Has seleccionado la opción " + (numero === 'BLANCO' ? '' : '0') + numero + ": " + descripcion);
+
+            // ENVIAR EL VOTO EN SEGUNDO PLANO A LA API CON TODOS LOS PARÁMETROS
+            try {
+                const respuesta = await fetch('/api/votar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        usuario_discord: usuarioDiscord,
+                        opcion_marcada: descripcion,
+                        tipo_eleccion: "Presidencial",
+                        region: regionSeleccionada,
+                        ubicacion: ubicacionSeleccionada
+                    })
+                });
+
+                if (respuesta.ok) {
+                    // Espera un momento corto para ver la X marcada antes de la confirmación
+                    setTimeout(function() {
+                        document.getElementById('pantallaAgradecimiento').style.display = 'flex';
+                    }, 550);
+                } else {
+                    alert("Hubo un error al procesar el voto en el servidor de escrutinio.");
+                }
+            } catch (error) {
+                console.error("Error al enviar el voto:", error);
+                alert("Error de conexión. Tu voto no pudo guardarse.");
+            }
+        }
+    </script>
+
 </body>
 </html>
