@@ -12,14 +12,17 @@ export default async function handler(req, res) {
   const FILE_PATH = 'votos.json';
 
   try {
-    // 1. Obtener el archivo votos.json actual desde GitHub
     const url = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`;
     const resGet = await fetch(url, {
-      headers: { 'Authorization': `token ${TOKEN}`, 'Accept': 'application/vnd.github.v3+json' }
+      headers: { 
+        'Authorization': `token ${TOKEN}`, 
+        'Accept': 'application/vnd.github.v3+json',
+        'User-Agent': 'Vercel-Serverless-App'
+      }
     });
 
     let sha = null;
-    let votos actuales = [];
+    let votosActuales = [];
 
     if (resGet.status === 200) {
       const dataGet = await resGet.json();
@@ -28,7 +31,6 @@ export default async function handler(req, res) {
       votosActuales = JSON.parse(contenidoTexto || '[]');
     }
 
-    // 2. Crear el nuevo voto
     const ip_votante = req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'IP_DESCONOCIDA';
     const nuevoVoto = {
       id: votosActuales.length + 1,
@@ -41,7 +43,6 @@ export default async function handler(req, res) {
 
     votosActuales.push(nuevoVoto);
 
-    // 3. Subir el archivo actualizado a GitHub
     const nuevoContenidoBase64 = Buffer.from(JSON.stringify(votosActuales, null, 2)).toString('base64');
 
     const resPut = await fetch(url, {
@@ -49,7 +50,8 @@ export default async function handler(req, res) {
       headers: {
         'Authorization': `token ${TOKEN}`,
         'Content-Type': 'application/json',
-        'Accept': 'application/vnd.github.v3+json'
+        'Accept': 'application/vnd.github.v3+json',
+        'User-Agent': 'Vercel-Serverless-App'
       },
       body: JSON.stringify({
         message: '🗳️ Nuevo voto registrado',
@@ -58,12 +60,16 @@ export default async function handler(req, res) {
       })
     });
 
-    if (!resPut.ok) throw new Error('Error al guardar en GitHub');
+    if (!resPut.ok) {
+      const errData = await resPut.text();
+      console.error("Error GitHub API:", errData);
+      throw new Error('Error al guardar en GitHub');
+    }
 
     return res.status(200).json({ OK: true });
 
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: 'Error del servidor al procesar el voto local.' });
+    console.error("Error interno:", error);
+    return res.status(500).json({ error: 'Error al procesar el voto en el sistema local.' });
   }
 }
