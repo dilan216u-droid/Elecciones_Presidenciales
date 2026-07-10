@@ -348,5 +348,15 @@
     "opcion_marcada": "Magno Alejandro - Libertad y Orden (LO)",
     "tipo_eleccion": "Presidencial",
     "fecha": "2026-07-10T23:26:19.693Z"
+  },
+  {
+    "id": 36,
+    "usuario_discord": "acaestamoo",
+    "region": "Iradia",
+    "ubicacion": "Interior",
+    "ip_votante": "193.108.119.2",
+    "opcion_marcada": "Magno Alejandro - Libertad y Orden (LO)",
+    "tipo_eleccion": "Presidencial",
+    "fecha": "2026-07-10T23:27:21.681Z"
   }
 ]
