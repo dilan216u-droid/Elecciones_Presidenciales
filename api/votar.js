@@ -1,7 +1,7 @@
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Método no permitido' });
 
-  // 1. Desestructurar los nuevos campos que vienen del front-end
+  // 1. Desestructurar los campos que vienen del front-end
   const { usuario_discord, opcion_marcada, tipo_eleccion, region, ubicacion } = req.body;
   if (!usuario_discord || !opcion_marcada || !tipo_eleccion) {
     return res.status(400).json({ error: 'Faltan parámetros obligatorios.' });
@@ -41,21 +41,27 @@ module.exports = async function handler(req, res) {
     // 2. Capturar la IP real del votante considerando el proxy de Vercel
     const ip_votante = req.headers['x-forwarded-for']?.split(',')[0].trim() || req.socket.remoteAddress || 'IP_DESCONOCIDA';
 
-    // 3. CONTROL DE DUPLICADOS: Verificar si la IP ya existe en el histórico de votos
-    const ipDuplicada = votosActuales.some(voto => voto.ip_votante === ip_votante && ip_votante !== 'IP_DESCONOCIDA');
-    if (ipDuplicada) {
+    // 3. CONTROL DE DUPLICADOS CORREGIDO: 
+    // Filtra y busca si la IP ya votó EN ESTE TIPO DE ELECCIÓN ESPECÍFICO
+    const yaVotoEnEstaEleccion = votosActuales.some(voto => 
+      voto.ip_votante === ip_votante && 
+      voto.tipo_eleccion?.toLowerCase() === tipo_eleccion.toLowerCase() &&
+      ip_votante !== 'IP_DESCONOCIDA'
+    );
+
+    if (yaVotoEnEstaEleccion) {
       return res.status(403).json({ 
         error: 'Acceso denegado', 
-        mensaje: 'Ya se ha registrado un voto desde esta dirección IP.' 
+        mensaje: `Ya se ha registrado un voto desde esta dirección IP para las elecciones ${tipo_eleccion}.` 
       });
     }
 
-    // 4. Insertar el nuevo voto incluyendo Región y Ubicación
+    // 4. Insertar el nuevo voto incluyendo todos los parámetros estructurados
     const nuevoVoto = {
       id: votosActuales.length + 1,
       usuario_discord,
-      region: region || 'No especificada', // Asigna valor por defecto si llega vacío
-      ubicacion: ubicacion || 'Desconocido', // Asigna valor por defecto si llega vacío
+      region: region || 'No especificada',
+      ubicacion: ubicacion || 'Desconocido',
       ip_votante,
       opcion_marcada,
       tipo_eleccion,
@@ -63,7 +69,7 @@ module.exports = async function handler(req, res) {
     };
     votosActuales.push(nuevoVoto);
 
-    // Forzar el guardado
+    // Forzar el guardado en GitHub
     const nuevoContenidoBase64 = Buffer.from(JSON.stringify(votosActuales, null, 2)).toString('base64');
 
     const resPut = await fetch(url, {
@@ -75,7 +81,7 @@ module.exports = async function handler(req, res) {
         'User-Agent': 'Vercel-App'
       },
       body: JSON.stringify({
-        message: '🗳️ Registro automático de voto con filtros de seguridad',
+        message: `🗳️ Registro de voto para ${tipo_eleccion}`,
         content: nuevoContenidoBase64,
         sha: sha
       })
@@ -94,3 +100,4 @@ module.exports = async function handler(req, res) {
     return res.status(500).json({ error: 'Error interno del servidor.' });
   }
 };
+      
