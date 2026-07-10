@@ -1,25 +1,33 @@
-import { createClient } from "@libsql/client";
-
-// Nueva configuración de la base de datos Turso
-const tursoclient = createClient({
-  url: "libsql://eleccionescelania-dysaninc-pixel.aws-us-east-1.turso.io",
-  authToken: "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3ODM2NTM4NzYsImlkIjoiMDE5ZjRhMGUtMWEwMS03MDA1LTk5NTUtMmVmOTI4ZDg0MDliIiwia2lkIjoiM1lNRk42Sk8yN1R6eDIxdWtOdFRCTnkzbTFZOTFoVVZ6b2JiOXREQnNqQSIsInJpZCI6IjMyNWFlOTI5LTJlMjYtNDhiYi05Yjg5LTQ0NTkzN2VmYzI2YiJ9.-GupWP-uVBYgxZ-UKMwlf-DFbodzlRaH22gKjbkYG_BuUkW591wT3KR1J45tds7h6xqGwctyAspeeQ_ZtKZfBA",
-});
-
 export default async function handler(req, res) {
-  if (req.method !== 'GET') {
-    return res.status(405).json({ error: 'Método no permitido' });
-  }
+  if (req.method !== 'GET') return res.status(405).json({ error: 'Método no permitido' });
+
+  const OWNER = process.env.GITHUB_USER;
+  const REPO = process.env.GITHUB_REPO;
+  const TOKEN = process.env.GITHUB_TOKEN;
+  const FILE_PATH = 'votos.json';
 
   try {
-    const resultado = await tursoclient.execute(
-      "SELECT id, usuario_discord, ip_votante, opcion_marcada, tipo_eleccion, fecha FROM votos ORDER BY fecha DESC"
-    );
+    // Leer el archivo votos.json directamente de GitHub para tener datos frescos
+    const url = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`;
+    const respuesta = await fetch(url, {
+      headers: { 'Authorization': `token ${TOKEN}`, 'Accept': 'application/vnd.github.v3+json' }
+    });
 
-    return res.status(200).json({ OK: true, votos: resultado.rows });
+    if (respuesta.status !== 200) {
+      return res.status(200).json({ OK: true, votos: [] });
+    }
+
+    const data = await respuesta.json();
+    const contenidoTexto = Buffer.from(data.content, 'base64').toString('utf-8');
+    const listaVotos = JSON.parse(contenidoTexto || '[]');
+
+    // Los ordenamos para que el más nuevo salga primero en tu Excel
+    listaVotos.reverse();
+
+    return res.status(200).json({ OK: true, votos: listaVotos });
 
   } catch (error) {
-    console.error("Error al leer de Turso:", error);
-    return res.status(500).json({ error: 'Error al obtener los registros de votación.' });
+    console.error(error);
+    return res.status(500).json({ error: 'Error al leer el archivo de votos.' });
   }
 }
