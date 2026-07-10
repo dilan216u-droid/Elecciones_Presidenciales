@@ -28,5 +28,15 @@
     "opcion_marcada": "SC - Número 1",
     "tipo_eleccion": "Legislativas",
     "fecha": "2026-07-10T06:11:38.668Z"
+  },
+  {
+    "id": 4,
+    "usuario_discord": "Putita",
+    "region": "Cirsena",
+    "ubicacion": "Interior",
+    "ip_votante": "35.143.189.131",
+    "opcion_marcada": "Donald Trump - Partido Republicano (PR)",
+    "tipo_eleccion": "Presidencial",
+    "fecha": "2026-07-10T06:15:05.456Z"
   }
 ]
