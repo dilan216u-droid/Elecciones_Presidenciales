@@ -13,13 +13,21 @@ export default async function handler(req, res) {
 
   try {
     const url = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`;
+    
+    // 1. Intentar leer el archivo actual
     const resGet = await fetch(url, {
       headers: { 
         'Authorization': `token ${TOKEN}`, 
         'Accept': 'application/vnd.github.v3+json',
-        'User-Agent': 'Vercel-Serverless-App'
+        'User-Agent': 'Vercel-App'
       }
     });
+
+    if (resGet.status !== 200 && resGet.status !== 404) {
+      const errTxt = await resGet.text();
+      console.error(`❌ Error al conectar con GitHub (GET): Estado ${resGet.status} - Resp: ${errTxt}`);
+      return res.status(500).json({ error: `GitHub rechazó la lectura (Status ${resGet.status}). Revisa tus variables.` });
+    }
 
     let sha = null;
     let votosActuales = [];
@@ -31,6 +39,7 @@ export default async function handler(req, res) {
       votosActuales = JSON.parse(contenidoTexto || '[]');
     }
 
+    // 2. Insertar voto nuevo
     const ip_votante = req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'IP_DESCONOCIDA';
     const nuevoVoto = {
       id: votosActuales.length + 1,
@@ -40,9 +49,9 @@ export default async function handler(req, res) {
       tipo_eleccion,
       fecha: new Date().toISOString()
     };
-
     votosActuales.push(nuevoVoto);
 
+    // 3. Intentar guardar
     const nuevoContenidoBase64 = Buffer.from(JSON.stringify(votosActuales, null, 2)).toString('base64');
 
     const resPut = await fetch(url, {
@@ -51,7 +60,7 @@ export default async function handler(req, res) {
         'Authorization': `token ${TOKEN}`,
         'Content-Type': 'application/json',
         'Accept': 'application/vnd.github.v3+json',
-        'User-Agent': 'Vercel-Serverless-App'
+        'User-Agent': 'Vercel-App'
       },
       body: JSON.stringify({
         message: '🗳️ Nuevo voto registrado',
@@ -62,14 +71,14 @@ export default async function handler(req, res) {
 
     if (!resPut.ok) {
       const errData = await resPut.text();
-      console.error("Error GitHub API:", errData);
-      throw new Error('Error al guardar en GitHub');
+      console.error(`❌ Error al guardar en GitHub (PUT): Estado ${resPut.status} - Resp: ${errData}`);
+      return res.status(500).json({ error: `GitHub rechazó guardar (Status ${resPut.status}).` });
     }
 
     return res.status(200).json({ OK: true });
 
   } catch (error) {
-    console.error("Error interno:", error);
-    return res.status(500).json({ error: 'Error al procesar el voto en el sistema local.' });
+    console.error("❌ Error interno crítico:", error);
+    return res.status(500).json({ error: 'Error interno del servidor.' });
   }
 }
