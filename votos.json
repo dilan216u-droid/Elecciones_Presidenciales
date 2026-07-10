@@ -218,5 +218,15 @@
     "opcion_marcada": "ADL - Número 1",
     "tipo_eleccion": "Legislativas",
     "fecha": "2026-07-10T20:39:54.537Z"
+  },
+  {
+    "id": 23,
+    "usuario_discord": "Aso",
+    "region": "Simósie",
+    "ubicacion": "Interior",
+    "ip_votante": "190.95.44.113",
+    "opcion_marcada": "Donald Trump - Partido Republicano (PR)",
+    "tipo_eleccion": "Presidencial",
+    "fecha": "2026-07-10T20:53:03.327Z"
   }
 ]
