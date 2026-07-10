@@ -38,5 +38,15 @@
     "opcion_marcada": "Donald Trump - Partido Republicano (PR)",
     "tipo_eleccion": "Presidencial",
     "fecha": "2026-07-10T06:15:05.456Z"
+  },
+  {
+    "id": 5,
+    "usuario_discord": "RexLuis07",
+    "region": "Otresa",
+    "ubicacion": "Interior",
+    "ip_votante": "190.97.228.133",
+    "opcion_marcada": "Magno Alejandro - Libertad y Orden (LO)",
+    "tipo_eleccion": "Presidencial",
+    "fecha": "2026-07-10T06:56:57.880Z"
   }
 ]
