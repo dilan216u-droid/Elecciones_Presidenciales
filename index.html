@@ -216,7 +216,7 @@
         </div>
     </div>
 
-    <!-- VENTANA DE AGRADECIMIENTO FINAL (CON TU ENLACE DE RESULTADOS CORREGIDO) -->
+    <!-- VENTANA DE AGRADECIMIENTO FINAL ACTUALIZADA -->
     <div id="pantallaAgradecimiento" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10005; display: none; justify-content: center; align-items: center;">
         <div style="background: white; padding: 40px 30px; border-radius: 8px; max-width: 500px; width: 90%; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
             <div style="font-size: 3.5rem; color: #2E7D32; margin-bottom: 15px;">✓</div>
@@ -225,11 +225,10 @@
                 Tu intención de voto ha sido procesada correctamente por la mesa de escrutinio.
             </p>
             <p style="color: #666; font-size: 0.9rem; margin-bottom: 10px;">
-                Mire los resultados de las elecciones en:
+                Mira los resultados de las elecciones en vivo en:
             </p>
-            <!-- Coloca aquí tu URL real de Vercel/Resultados tanto en el href como en el texto -->
-            <a href="/api/resultados" style="display: inline-block; color: var(--orange-alert); font-weight: bold; font-size: 1.1rem; text-decoration: none; word-break: break-all; border-bottom: 2px dashed var(--orange-alert); padding-bottom: 2px;">
-                /api/resultados
+            <a href="https://elecciones-presidenciales-one.vercel.app/resultados.html" target="_blank" style="display: inline-block; color: var(--orange-alert); font-weight: bold; font-size: 1.05rem; text-decoration: none; word-break: break-all; border-bottom: 2px dashed var(--orange-alert); padding-bottom: 2px;">
+                elecciones-presidenciales-one.vercel.app/resultados.html
             </a>
         </div>
     </div>
@@ -302,12 +301,10 @@
     </main>
 
     <script>
-        // Variables globales para guardar los datos de validación
         let usuarioDiscord = "";
         let regionSeleccionada = "";
         let ubicacionSeleccionada = "";
 
-        // Bloquea el tarjetón hasta que pasen la validación inicial con todos los campos llenos
         function validarUsuario() {
             var usuario = document.getElementById('discordUser').value.trim();
             var region = document.getElementById('regionSelect').value;
@@ -326,7 +323,6 @@
                 return;
             }
 
-            // Guardamos los datos validados en las variables globales
             usuarioDiscord = usuario;
             regionSeleccionada = region;
             ubicacionSeleccionada = ubicacion;
@@ -335,25 +331,21 @@
         }
 
         async function seleccionarOpcion(elemento, numero, descripcion) {
-            // Evitamos que voten sin validar por si acaso
             if (!usuarioDiscord || !regionSeleccionada || !ubicacionSeleccionada) {
                 alert("Primero debes completar la verificación de seguridad.");
                 document.getElementById('pantallaValidacion').style.display = 'flex';
                 return;
             }
 
-            // Elimina la X del candidato seleccionado previamente
             const seleccionPrevia = document.querySelector('.seleccionado');
             if (seleccionPrevia) {
                 seleccionPrevia.classList.remove('seleccionado');
             }
 
-            // Añade la clase al elemento clickeado para mostrar la X
             elemento.classList.add('seleccionado');
 
             console.log("Has seleccionado la opción " + (numero === 'BLANCO' ? '' : '0') + numero + ": " + descripcion);
 
-            // ENVIAR EL VOTO EN SEGUNDO PLANO A LA API CON TODOS LOS PARÁMETROS
             try {
                 const respuesta = await fetch('/api/votar', {
                     method: 'POST',
@@ -368,7 +360,6 @@
                 });
 
                 if (respuesta.ok) {
-                    // Espera un momento corto para ver la X marcada antes de la confirmación
                     setTimeout(function() {
                         document.getElementById('pantallaAgradecimiento').style.display = 'flex';
                     }, 550);
