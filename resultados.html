@@ -149,7 +149,6 @@
             display: grid;
             grid-template-columns: 1fr;
             gap: 15px;
-            margin-bottom: 30px;
         }
 
         .fila-resultado {
@@ -232,59 +231,6 @@
             color: var(--primary-blue);
         }
 
-        /* CONTENEDOR DE REPORTES TÉCNICOS INTEGRADOS */
-        .seccion-tecnica-global {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-top: 35px;
-            border-top: 2px dashed var(--border-light);
-            padding-top: 25px;
-        }
-
-        .bloque-tecnico {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-light);
-            border-radius: 6px;
-            padding: 20px;
-        }
-
-        .bloque-tecnico h3 {
-            margin-top: 0;
-            color: var(--primary-blue);
-            font-size: 1.1rem;
-            border-bottom: 2px solid var(--primary-blue);
-            padding-bottom: 8px;
-            text-transform: uppercase;
-        }
-
-        .tabla-tecnica {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9rem;
-        }
-
-        .tabla-tecnica td {
-            padding: 8px 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .tabla-tecnica td:last-child {
-            text-align: right;
-            font-weight: bold;
-        }
-
-        .nota-desviacion {
-            grid-column: 1 / -1;
-            background-color: #FFF3E0;
-            border-left: 4px solid var(--orange-alert);
-            padding: 12px;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            color: #E65100;
-            margin-top: 5px;
-        }
-
         @media (max-width: 768px) {
             .grid-botones { grid-template-columns: 1fr; }
             .panel-avance { grid-template-columns: repeat(2, 1fr); }
@@ -293,20 +239,17 @@
             .candidato-foto-res, .candidato-logo-res { margin-right: 0; margin-bottom: 10px; }
             .barra-votos-container { width: 100%; padding: 0; margin-bottom: 15px; }
             .porcentaje-total { width: 100%; text-align: center; }
-            .seccion-tecnica-global { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 
 <body>
 
-    <!-- BARRA SUPERIOR DEL INSTITUTO ELECTORAL NACIONAL -->
     <nav class="navbar">
         <h2>Instituto Electoral Nacional - Resultados</h2>
         <button class="btn-volver" id="btnVolverMenu" style="display: none;" onclick="mostrarMenu()">Volver al Menú</button>
     </nav>
 
-    <!-- MENÚ PRINCIPAL -->
     <main class="menu-container" id="menuInicial">
         <h1>Consolidado Nacional de Preconteo</h1>
         <div class="grid-botones">
@@ -319,7 +262,6 @@
         </div>
     </main>
 
-    <!-- VISTA 1: RESULTADOS PRESIDENCIALES -->
     <section class="view-section" id="vistaPresidenciales">
         <h2 style="color: var(--primary-blue); text-transform: uppercase;">Presidente y Vicepresidente - República</h2>
         
@@ -331,7 +273,6 @@
         </div>
 
         <div class="resultados-grid">
-            <!-- Manuela Castañeira -->
             <div class="fila-resultado">
                 <div class="candidato-perfil">
                     <img src="https://i.ibb.co/Wv5WSvmC/images-3.jpg" alt="Manuela" class="candidato-foto-res">
@@ -343,7 +284,6 @@
                 </div>
                 <div class="porcentaje-total">72.50%</div>
             </div>
-            <!-- Donald Trump -->
             <div class="fila-resultado">
                 <div class="candidato-perfil">
                     <img src="https://i.ibb.co/yBKnQcK5/images-1.png" alt="Trump" class="candidato-foto-res">
@@ -355,7 +295,6 @@
                 </div>
                 <div class="porcentaje-total">49.75%</div>
             </div>
-            <!-- Magno Alejandro -->
             <div class="fila-resultado">
                 <div class="candidato-perfil">
                     <img src="https://i.ibb.co/n8rzcyrV/1783455763399.jpg" alt="Magno" class="candidato-foto-res">
@@ -367,7 +306,6 @@
                 </div>
                 <div class="porcentaje-total">26.15%</div>
             </div>
-            <!-- Indecisos -->
             <div class="fila-resultado" style="border-left-color: #777;">
                 <div class="candidato-perfil">
                     <div style="width:55px; font-weight:bold; color:#777; text-align:center; font-size:1.5rem;">I</div>
@@ -380,185 +318,5 @@
                 <div class="porcentaje-total">2.60%</div>
             </div>
         </div>
-
-        <!-- REPORTE TÉCNICO COMPARTIDO (PRESIDENCIAL) -->
-        <div class="seccion-tecnica-global">
-            <div class="nota-desviacion">
-                <strong>Nota:</strong> La suma de los porcentajes supera el 100% debido a que los datos originales de las encuestas presidenciales base sumaban 101% en su propia distribución.
-            </div>
-            <div class="bloque-tecnico">
-                <h3>🏛️ Reconfiguración del Barómetro Electoral Global (Total: 100%)</h3>
-                <table class="tabla-tecnica">
-                    <tr><td>Voto Directo (Territorio Nacional)</td><td>41.00%</td></tr>
-                    <tr><td>Voto Directo (Extranjero)</td><td>4.00%</td></tr>
-                    <tr><td>Intención de Voto (Rol)</td><td>30.00%</td></tr>
-                    <tr><td>Encuestas Previas</td><td>25.00%</td></tr>
-                </table>
-            </div>
-            <div class="bloque-tecnico">
-                <h3>📊 Reporte Técnico: Participación y Carga de Mesas On-Rol</h3>
-                <table class="tabla-tecnica">
-                    <tr><td>Universo Total de Mesas en el Territorio</td><td>100,840</td></tr>
-                    <tr><td>Padrón Total de Ciudadanos Aptos</td><td>24,750,000</td></tr>
-                    <tr><td>Masa Crítica de Votos Esperados (68% ideal)</td><td>16,830,000</td></tr>
-                </table>
-            </div>
-        </div>
     </section>
     
-<!-- VISTA 2: RESULTADOS LEGISLATIVAS -->
-    <section class="view-section" id="vistaLegislativas">
-        <h2 style="color: var(--primary-blue); text-transform: uppercase;">Senado - Circunscripción Nacional</h2>
-        
-        <div class="panel-avance">
-            <div class="dato-avance"><div class="numero naranja">10,0%</div><div class="label">Mesas Informadas</div></div>
-            <div class="dato-avance"><div class="numero">100.840</div><div class="label">Total Mesas</div></div>
-            <div class="dato-avance"><div class="numero">1,683,000</div><div class="label">Votos Válidos</div></div>
-            <div class="dato-avance"><div class="numero">6,80%</div><div class="label">Porcentaje de Participación</div></div>
-        </div>
-
-        <div class="resultados-grid">
-            <!-- MAS -->
-            <div class="fila-resultado">
-                <div class="candidato-perfil">
-                    <img src="https://i.ibb.co/W4N9XJ9K/1-20260708-022742-0000.png" alt="MAS" class="candidato-logo-res">
-                    <div class="candidato-nombres"><div class="name">Movimiento al Socialismo (MAS)</div><div class="party">Agrupación Parlamentaria</div></div>
-                </div>
-                <div class="barra-votos-container">
-                    <div class="progreso-fondo"><div class="progreso-llenado" style="width: 63.05%;"></div></div>
-                    <div class="votos-numericos">1,061,132 Votos</div>
-                </div>
-                <div class="porcentaje-total">63.05%</div>
-            </div>
-            <!-- FRENOVA -->
-            <div class="fila-resultado">
-                <div class="candidato-perfil">
-                    <img src="https://i.ibb.co/zWSWhptj/1-20260708-022800-0000.png" alt="FRENOVA" class="candidato-logo-res">
-                    <div class="candidato-nombres"><div class="name">Frente de Renovación Nacional (FRENOVA)</div><div class="party">4 Candidatos</div></div>
-                </div>
-                <div class="barra-votos-container">
-                    <div class="progreso-fondo"><div class="progreso-llenado" style="width: 25.45%;"></div></div>
-                    <div class="votos-numericos">428,408 Votos</div>
-                </div>
-                <div class="porcentaje-total">25.45%</div>
-            </div>
-            <!-- ADL -->
-            <div class="fila-resultado">
-                <div class="candidato-perfil">
-                    <img src="https://i.ibb.co/JWb7QMKw/2094-sin-titulo-20260426190625-1.png" alt="ADL" class="candidato-logo-res">
-                    <div class="candidato-nombres"><div class="name">Acción por la Democracia y Libertad (ADL)</div><div class="party">10 Candidatos</div></div>
-                </div>
-                <div class="barra-votos-container">
-                    <div class="progreso-fondo"><div class="progreso-llenado" style="width: 16.84%;"></div></div>
-                    <div class="votos-numericos">283,383 Votos</div>
-                </div>
-                <div class="porcentaje-total">16.84%</div>
-            </div>
-            <!-- CR -->
-            <div class="fila-resultado">
-                <div class="candidato-perfil">
-                    <img src="https://i.ibb.co/YTcqRTCy/1-20260709-214258-0000.png" alt="CR" class="candidato-logo-res">
-                    <div class="candidato-nombres"><div class="name">Causa Radical (CR)</div><div class="party">3 Candidatos</div></div>
-                </div>
-                <div class="barra-votos-container">
-                    <div class="progreso-fondo"><div class="progreso-llenado" style="width: 15.00%;"></div></div>
-                    <div class="votos-numericos">252,500 Votos</div>
-                </div>
-                <div class="porcentaje-total">15.00%</div>
-            </div>
-            <!-- PR -->
-            <div class="fila-resultado">
-                <div class="candidato-perfil">
-                    <img src="https://i.ibb.co/Rk9CKW7V/1-20260708-022657-0000.png" alt="PR" class="candidato-logo-res">
-                    <div class="candidato-nombres"><div class="name">Partido Republicano (PR)</div><div class="party">Agrupación Parlamentaria</div></div>
-                </div>
-                <div class="barra-votos-container">
-                    <div class="progreso-fondo"><div class="progreso-llenado" style="width: 10.92%;"></div></div>
-                    <div class="votos-numericos">183,784 Votos</div>
-                </div>
-                <div class="porcentaje-total">10.92%</div>
-            </div>
-            <!-- SC -->
-            <div class="fila-resultado">
-                <div class="candidato-perfil">
-                    <img src="https://i.ibb.co/QFVDPKwT/1-20260709-213342-0000.png" alt="CS" class="candidato-logo-res">
-                    <div class="candidato-nombres"><div class="name">Soberanía Ciudadana (SC)</div><div class="party">1 Candidato</div></div>
-                </div>
-                <div class="barra-votos-container">
-                    <div class="progreso-fondo"><div class="progreso-llenado" style="width: 9.69%;"></div></div>
-                    <div class="votos-numericos">163,083 Votos</div>
-                </div>
-                <div class="porcentaje-total">9.69%</div>
-            </div>
-            <!-- FCC -->
-            <div class="fila-resultado">
-                <div class="candidato-perfil">
-                    <img src="https://i.ibb.co/zHf1zpLK/86-sin-t-tulo-20260701233027.png" alt="FCC" class="candidato-logo-res">
-                    <div class="candidato-nombres"><div class="name">Frente de Convergencia Civil (FCC)</div><div class="party">6 Candidatos</div></div>
-                </div>
-                <div class="barra-votos-container">
-                    <div class="progreso-fondo"><div class="progreso-llenado" style="width: 8.00%;"></div></div>
-                    <div class="votos-numericos">134,640 Votos</div>
-                </div>
-                <div class="porcentaje-total">8.00%</div>
-            </div>
-            <!-- LO -->
-            <div class="fila-resultado">
-                <div class="candidato-perfil">
-                    <img src="https://i.ibb.co/BH8mJKcN/20260708-022628-0000.png" alt="LO" class="candidato-logo-res">
-                    <div class="candidato-nombres"><div class="name">Libertad y Orden (LO)</div><div class="party">3 Candidatos</div></div>
-                </div>
-                <div class="barra-votos-container">
-                    <div class="progreso-fondo"><div class="progreso-llenado" style="width: 1.05%;"></div></div>
-                    <div class="votos-numericos">17,756 Votos</div>
-                </div>
-                <div class="porcentaje-total">1.05%</div>
-            </div>
-        </div>
-
-        <!-- REPORTE TÉCNICO COMPARTIDO (LEGISLATIVAS) -->
-        <div class="seccion-tecnica-global">
-            <div class="bloque-tecnico">
-                <h3>🏛️ Reconfiguración del Barómetro Electoral Global (Total: 100%)</h3>
-                <table class="tabla-tecnica">
-                    <tr><td>Voto Directo (Territorio Nacional)</td><td>41.00%</td></tr>
-                    <tr><td>Voto Directo (Extranjero)</td><td>4.00%</td></tr>
-                    <tr><td>Intención de Voto (Rol)</td><td>30.00%</td></tr>
-                    <tr><td>Encuestas Previas</td><td>25.00%</td></tr>
-                </table>
-            </div>
-            <div class="bloque-tecnico">
-                <h3>📊 Reporte Técnico: Participación y Carga de Mesas On-Rol</h3>
-                <table class="tabla-tecnica">
-                    <tr><td>Universo Total de Mesas en el Territorio</td><td>100,840</td></tr>
-                    <tr><td>Padrón Total de Ciudadanos Aptos</td><td>24,750,000</td></tr>
-                    <tr><td>Masa Crítica de Votos Esperados (68% ideal)</td><td>16,830,000</td></tr>
-                </table>
-            </div>
-        </div>
-    </section>
-
-    <!-- CONTROLADOR JAVASCRIPT -->
-    <script>
-        function cargarResultados(tipoEleccion) {
-            document.getElementById('menuInicial').style.display = 'none';
-            document.getElementById('btnVolverMenu').style.display = 'block';
-
-            if(tipoEleccion === 'presidenciales') {
-                document.getElementById('vistaPresidenciales').style.display = 'block';
-                document.getElementById('vistaLegislativas').style.display = 'none';
-            } else if(tipoEleccion === 'legislativas') {
-                document.getElementById('vistaLegislativas').style.display = 'block';
-                document.getElementById('vistaPresidenciales').style.display = 'none';
-            }
-        }
-
-        function mostrarMenu() {
-            document.getElementById('menuInicial').style.display = 'block';
-            document.getElementById('vistaPresidenciales').style.display = 'none';
-            document.getElementById('vistaLegislativas').style.display = 'none';
-            document.getElementById('btnVolverMenu').style.display = 'none';
-        }
-    </script>
-</body>
-</html>
