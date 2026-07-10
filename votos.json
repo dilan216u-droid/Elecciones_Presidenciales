@@ -318,5 +318,15 @@
     "opcion_marcada": "Magno Alejandro - Libertad y Orden (LO)",
     "tipo_eleccion": "Presidencial",
     "fecha": "2026-07-10T23:21:24.340Z"
+  },
+  {
+    "id": 33,
+    "usuario_discord": "soy_adrian22",
+    "region": "Simósie",
+    "ubicacion": "Interior",
+    "ip_votante": "162.251.61.46",
+    "opcion_marcada": "Magno Alejandro - Libertad y Orden (LO)",
+    "tipo_eleccion": "Presidencial",
+    "fecha": "2026-07-10T23:23:16.475Z"
   }
 ]
