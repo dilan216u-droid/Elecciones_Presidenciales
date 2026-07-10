@@ -170,7 +170,7 @@
 </head>
 <body>
 
-    <!-- VENTANA DE VERIFICACIÓN INICIAL (DISCORD + REGIONES + DESDE DONDE VOTA) -->
+    <!-- VENTANA DE VERIFICACIÓN INICIAL -->
     <div id="pantallaValidacion" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,51,102,0.95); z-index: 10000; display: flex; justify-content: center; align-items: center;">
         <div style="background: white; padding: 30px; border-radius: 8px; max-width: 450px; width: 90%; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
             <h3 style="color: var(--primary-color); margin-top: 0; text-transform: uppercase; font-size: 1.2rem; letter-spacing: 0.5px;">Verificación de Seguridad</h3>
@@ -216,7 +216,7 @@
         </div>
     </div>
 
-    <!-- VENTANA DE AGRADECIMIENTO FINAL ACTUALIZADA -->
+    <!-- VENTANA DE AGRADECIMIENTO FINAL ACTUALIZADA CON TU NUEVA URL -->
     <div id="pantallaAgradecimiento" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10005; display: none; justify-content: center; align-items: center;">
         <div style="background: white; padding: 40px 30px; border-radius: 8px; max-width: 500px; width: 90%; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
             <div style="font-size: 3.5rem; color: #2E7D32; margin-bottom: 15px;">✓</div>
@@ -227,6 +227,7 @@
             <p style="color: #666; font-size: 0.9rem; margin-bottom: 10px;">
                 Mira los resultados de las elecciones en vivo en:
             </p>
+            <!-- URL Actualizada del Panel Presidencial -->
             <a href="https://elecciones-presidenciales-one.vercel.app/resultados.html" target="_blank" style="display: inline-block; color: var(--orange-alert); font-weight: bold; font-size: 1.05rem; text-decoration: none; word-break: break-all; border-bottom: 2px dashed var(--orange-alert); padding-bottom: 2px;">
                 elecciones-presidenciales-one.vercel.app/resultados.html
             </a>
@@ -246,13 +247,8 @@
         <!-- Opción 01: Magno Alejandro -->
         <div class="opcion-voto" onclick="seleccionarOpcion(this, 1, 'Magno Alejandro - Libertad y Orden (LO)')">
             <span class="numero-tarjeta">01</span>
-            
-            <!-- Logo del Partido -->
             <img src="https://i.ibb.co/BH8mJKcN/20260708-022628-0000.png" alt="Logo Libertad y Orden" class="logo-partido">
-            
-            <!-- Foto del Candidato -->
             <img src="https://i.ibb.co/n8rzcyrV/1783455763399.jpg" alt="Foto Magno Alejandro" class="foto-candidato">
-            
             <div class="info-candidato">
                 <div class="nombre-partido">Libertad y Orden (LO)</div>
                 <div class="nombre-candidato">Magno Alejandro</div>
@@ -262,13 +258,8 @@
         <!-- Opción 02: Donald Trump -->
         <div class="opcion-voto" onclick="seleccionarOpcion(this, 2, 'Donald Trump - Partido Republicano (PR)')">
             <span class="numero-tarjeta">02</span>
-            
-            <!-- Logo del Partido -->
             <img src="https://i.ibb.co/Rk9CKW7V/1-20260708-022657-0000.png" alt="Logo Partido Republicano" class="logo-partido">
-            
-            <!-- Foto del Candidato -->
             <img src="https://i.ibb.co/yBKnQcK5/images-1.png" alt="Foto Donald Trump" class="foto-candidato">
-            
             <div class="info-candidato">
                 <div class="nombre-partido">Partido Republicano (PR)</div>
                 <div class="nombre-candidato">Donald Trump</div>
@@ -278,13 +269,8 @@
         <!-- Opción 03: Manuela Castañeira -->
         <div class="opcion-voto" onclick="seleccionarOpcion(this, 3, 'Manuela Castañeira - Nuevo Movimiento al Socialismo (MAS)')">
             <span class="numero-tarjeta">03</span>
-            
-            <!-- Logo del Partido -->
             <img src="https://i.ibb.co/W4N9XJ9K/1-20260708-022742-0000.png" alt="Logo Nuevo MAS" class="logo-partido">
-            
-            <!-- Foto de la Candidata -->
             <img src="https://i.ibb.co/Wv5WSvmC/images-3.jpg" alt="Foto Manuela Castañeira" class="foto-candidato">
-            
             <div class="info-candidato">
                 <div class="nombre-partido">Nuevo Movimiento al Socialismo (MAS)</div>
                 <div class="nombre-candidato">Manuela Castañeira</div>
@@ -354,15 +340,18 @@
                         usuario_discord: usuarioDiscord,
                         opcion_marcada: descripcion,
                         tipo_eleccion: "Presidencial",
-                        region: regionSeleccionada,
-                        ubicacion: ubicacionSeleccionada
+                        region: regionSeleccionada,   // <--- Enviado de forma nativa a votar.js
+                        ubicacion: ubicacionSeleccionada // <--- Enviado de forma nativa a votar.js
                     })
                 });
 
-                if (respuesta.ok) {
+                if (respuesta.status === 200) {
                     setTimeout(function() {
                         document.getElementById('pantallaAgradecimiento').style.display = 'flex';
                     }, 550);
+                } else if (respuesta.status === 403) {
+                    const dataErr = await respuesta.json();
+                    alert(dataErr.mensaje || "Ya has votado utilizando esta dirección IP.");
                 } else {
                     alert("Hubo un error al procesar el voto en el servidor de escrutinio.");
                 }
