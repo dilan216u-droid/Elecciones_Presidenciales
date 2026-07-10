@@ -258,5 +258,15 @@
     "opcion_marcada": "Magno Alejandro - Libertad y Orden (LO)",
     "tipo_eleccion": "Presidencial",
     "fecha": "2026-07-10T23:11:46.636Z"
+  },
+  {
+    "id": 27,
+    "usuario_discord": "Strack7404",
+    "region": "Arkastra",
+    "ubicacion": "Interior",
+    "ip_votante": "181.42.215.163",
+    "opcion_marcada": "Manuela Castañeira - Nuevo Movimiento al Socialismo (MAS)",
+    "tipo_eleccion": "Presidencial",
+    "fecha": "2026-07-10T23:11:51.663Z"
   }
 ]
