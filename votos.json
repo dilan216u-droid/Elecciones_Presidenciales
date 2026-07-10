@@ -268,5 +268,15 @@
     "opcion_marcada": "Manuela Castañeira - Nuevo Movimiento al Socialismo (MAS)",
     "tipo_eleccion": "Presidencial",
     "fecha": "2026-07-10T23:11:51.663Z"
+  },
+  {
+    "id": 28,
+    "usuario_discord": "Straxk7404",
+    "region": "Cirsena",
+    "ubicacion": "Interior",
+    "ip_votante": "181.42.215.163",
+    "opcion_marcada": "Nuevo MAS - Número 1",
+    "tipo_eleccion": "Legislativas",
+    "fecha": "2026-07-10T23:12:44.524Z"
   }
 ]
