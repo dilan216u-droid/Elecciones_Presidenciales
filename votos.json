@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "id": 1,
+    "usuario_discord": "Nakamura",
+    "ip_votante": "38.121.212.94",
+    "opcion_marcada": "Logo ADL",
+    "tipo_eleccion": "Legislativas",
+    "fecha": "2026-07-10T05:45:43.001Z"
+  }
+]
