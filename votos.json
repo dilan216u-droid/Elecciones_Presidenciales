@@ -238,5 +238,15 @@
     "opcion_marcada": "Nuevo MAS - Número 1",
     "tipo_eleccion": "Legislativas",
     "fecha": "2026-07-10T21:19:19.376Z"
+  },
+  {
+    "id": 25,
+    "usuario_discord": "Cristina Fernández de Kirchner",
+    "region": "Valdena",
+    "ubicacion": "Interior",
+    "ip_votante": "181.236.202.214",
+    "opcion_marcada": "Donald Trump - Partido Republicano (PR)",
+    "tipo_eleccion": "Presidencial",
+    "fecha": "2026-07-10T22:13:05.191Z"
   }
 ]
