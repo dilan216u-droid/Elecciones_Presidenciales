@@ -188,5 +188,15 @@
     "opcion_marcada": "Manuela Castañeira - Nuevo Movimiento al Socialismo (MAS)",
     "tipo_eleccion": "Presidencial",
     "fecha": "2026-07-10T18:16:29.928Z"
+  },
+  {
+    "id": 20,
+    "usuario_discord": "Irenesidijoalgo",
+    "region": "Luva",
+    "ubicacion": "Interior",
+    "ip_votante": "190.46.176.4",
+    "opcion_marcada": "Nuevo MAS - Número 2",
+    "tipo_eleccion": "Legislativas",
+    "fecha": "2026-07-10T18:18:36.607Z"
   }
 ]
