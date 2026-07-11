@@ -348,5 +348,15 @@
     "opcion_marcada": "Donald Trump - Partido Republicano (PR)",
     "tipo_eleccion": "Presidencial",
     "fecha": "2026-07-11T00:40:11.057Z"
+  },
+  {
+    "id": 36,
+    "usuario_discord": "ofelia_we",
+    "region": "Iradia",
+    "ubicacion": "Interior",
+    "ip_votante": "38.91.107.115",
+    "opcion_marcada": "Manuela Castañeira - Nuevo Movimiento al Socialismo (MAS)",
+    "tipo_eleccion": "Presidencial",
+    "fecha": "2026-07-11T00:41:53.207Z"
   }
 ]
