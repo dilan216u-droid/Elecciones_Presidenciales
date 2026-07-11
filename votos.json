@@ -328,6 +328,15 @@
     "opcion_marcada": "Magno Alejandro - Libertad y Orden (LO)",
     "tipo_eleccion": "Presidencial",
     "fecha": "2026-07-10T23:28:06.458Z"
+  },
+  {
+    "id": 34,
+    "usuario_discord": "paradise.notforme",
+    "region": "Otresa",
+    "ubicacion": "Interior",
+    "ip_votante": "143.105.146.135",
+    "opcion_marcada": "Voto en Blanco",
+    "tipo_eleccion": "Presidencial",
+    "fecha": "2026-07-11T00:34:05.037Z"
   }
-  
 ]
