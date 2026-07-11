@@ -368,5 +368,15 @@
     "opcion_marcada": "Nuevo MAS - Número 4",
     "tipo_eleccion": "Legislativas",
     "fecha": "2026-07-11T00:43:20.410Z"
+  },
+  {
+    "id": 38,
+    "usuario_discord": "Wilmar0712",
+    "region": "Arkastra",
+    "ubicacion": "Interior",
+    "ip_votante": "191.97.8.190",
+    "opcion_marcada": "FCC - Número 1",
+    "tipo_eleccion": "Legislativas",
+    "fecha": "2026-07-11T01:42:06.684Z"
   }
 ]
