@@ -338,5 +338,15 @@
     "opcion_marcada": "Voto en Blanco",
     "tipo_eleccion": "Presidencial",
     "fecha": "2026-07-11T00:34:05.037Z"
+  },
+  {
+    "id": 35,
+    "usuario_discord": "paradise.notforme",
+    "region": "Otresa",
+    "ubicacion": "Interior",
+    "ip_votante": "143.105.146.135",
+    "opcion_marcada": "ADL - Número 1",
+    "tipo_eleccion": "Legislativas",
+    "fecha": "2026-07-11T00:34:40.611Z"
   }
 ]
