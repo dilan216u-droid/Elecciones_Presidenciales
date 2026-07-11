@@ -338,5 +338,15 @@
     "opcion_marcada": "ADL - Número 1",
     "tipo_eleccion": "Legislativas",
     "fecha": "2026-07-11T00:34:40.611Z"
+  },
+  {
+    "id": 35,
+    "usuario_discord": "@ytiq32",
+    "region": "Valdena",
+    "ubicacion": "Exterior",
+    "ip_votante": "167.0.255.121",
+    "opcion_marcada": "Donald Trump - Partido Republicano (PR)",
+    "tipo_eleccion": "Presidencial",
+    "fecha": "2026-07-11T00:40:11.057Z"
   }
 ]
